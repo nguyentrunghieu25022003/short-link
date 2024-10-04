@@ -1,7 +1,13 @@
+import PropTypes from "prop-types";
+import Header from "../components/header/index";
+
 const DefaultLayout = ({ children }) => {
     return (
         <>
-            {children}
+            <Header />
+            <main>
+                {children}
+            </main>
         </>
     );
 };

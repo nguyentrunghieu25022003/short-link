@@ -1,6 +1,7 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
 const shortid = require("shortid");
+const Url = require("../../../models/url.model");
 
 module.exports.createShortenedLink = async (req, res) => {
   try {
@@ -15,10 +16,20 @@ module.exports.createShortenedLink = async (req, res) => {
     const description = $('meta[name="description"]').attr("content") || $('meta[property="og:description"]').attr("content") || $('meta[name="twitter:description"]').attr("content") || null;
     const thumbnail = $('meta[property="og:image"]').attr("content") || null;
 
+    const newUrl = new Url({
+      originalUrl: originalUrl,
+      shortId: shortId,
+      title: title,
+      description: description,
+      thumbnail: thumbnail,
+    });
+    await newUrl.save();
+
     const acceptHeader = req.headers.accept || "";
 
     if (acceptHeader.includes("application/json")) {
       res.status(200).json({
+        shortId: shortId,
         shortUrl: shortUrl,
         title: title,
         description: description,
@@ -53,16 +64,20 @@ module.exports.createShortenedLink = async (req, res) => {
 
 module.exports.handleGetLocation = async (req, res) => {
   try {
-    const { latitude, longitude } = req.body;
+    const { shortId } = req.params;
     const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress || req.ip;
+    const locationResponse = await axios.get(`https://get.geojs.io/v1/ip/geo/${ip}.json`);
+    const locationInfo = locationResponse.data;
 
-    const locationInfo = await axios.get(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`);
-    const location = locationInfo?.data?.address || null;
-
-    res.status(200).json({
+    const urlData = await Url.findOne({ shortId: shortId });
+    urlData.visits.push({
       ip: ip,
-      location: location
+      location: locationInfo,
+      timestamp: Date.now(),
     });
+    urlData.save();
+
+    res.status(200).json({ locationInfo });
   } catch (err) {
     res.status(500).send("Error creating link: " + err.message);
   }

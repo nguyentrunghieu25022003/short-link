@@ -2,7 +2,7 @@ const bcrypt = require("bcryptjs");
 const User = require("../../../models/user.model");
 const { createAccessToken, createRefreshToken } = require("../../../middlewares/jwt");
 
-module.exports.handleRegister = async (req, res) => {
+module.exports.handleSignUp = async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
     const user = await User.findOne({ email: email });
@@ -23,7 +23,7 @@ module.exports.handleRegister = async (req, res) => {
   }
 };
 
-module.exports.handleLogin = async (req, res) => {
+module.exports.handleSignIn = async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email: email });
@@ -50,8 +50,26 @@ module.exports.handleLogin = async (req, res) => {
       sameSite: "None",
       path: "/"
     });
-    res.status(200).send({ message: "Login successful", user: user });
+    res.status(200).send({ message: "Login successful", user: { id: user.id, email: user.email }, });
   } catch (err) {
     res.status(500).send("Error login: " + err.message);
+  }
+};
+
+module.exports.handleCheckToken = async (req, res) => {
+  try {
+    res.status(200).send({ message: "Token is valid" });
+  } catch (err) {
+    res.status(500).send("Token not valid: " + err.message);
+  }
+};
+
+module.exports.handleLogOut = async (req, res) => {
+  try {
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
+    res.status(200).send({ message: "Logged out successful" });
+  } catch (err) {
+    res.status(500).send("Error logging out: " + err.message);
   }
 };

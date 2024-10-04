@@ -4,6 +4,6 @@ const router = express.Router();
 const controller = require("../controllers/url.controller");
 
 router.post("/shorten", controller.createShortenedLink);
-router.post("/location", controller.handleGetLocation);
+router.get("/:shortId", controller.handleGetLocation);
 
 module.exports = router;

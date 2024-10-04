@@ -25,8 +25,14 @@ const UrlSchema = new Schema({
   },
   visits: [
     {
-      ip: String,
-      location: String,
+      ip: {
+        type: String,
+        default: null,
+      },
+      location: {
+        type: Object,
+        default: null,
+      },
       timestamp: {
         type: Date,
         default: Date.now,
