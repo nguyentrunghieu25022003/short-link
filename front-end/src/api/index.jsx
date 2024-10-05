@@ -1,20 +1,32 @@
 import axios from "axios";
 
-const getUserIP = async () => {
+export const getUserIP = async () => {
   try {
-    const response = await axios.get("https://api.ipify.org/?format=json");
-    return response.data.ip;
-  } catch (error) {
-    console.error("Error getting IP address:", error);
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/url/ip`);
+    if(response.status === 200) {
+      return response.data.ip;
+    }
     return null;
+  } catch (error) {
+    console.error("Error getting IP address:", error.message);
   }
 };
 
-export const createShortenedLink = async (formData) => {
+export const getUserLocation = async (ip) => {
   try {
-    const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/url/shorten`,
-      formData
-    );
+    const locationResponse = await axios.get(`https://get.geojs.io/v1/ip/geo/${ip}.json`);
+    if(locationResponse.status === 200) {
+      return locationResponse.data;
+    }
+    return null;
+  } catch (error) {
+    console.log("Error getting location" + error.message);
+  }
+};
+
+export const getAllShortenedLink = async () => {
+  try {
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/url`);
     if (response.status === 200) {
       return response.data;
     }
@@ -24,15 +36,22 @@ export const createShortenedLink = async (formData) => {
   }
 };
 
-export const getLocation = async (shortId) => {
+export const getUserHistories = async (userId) => {
   try {
-    const ip = await getUserIP();
-    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/url/${shortId}`,
-      {
-        headers: {
-          "x-forwarded-for": ip || "127.0.0.1",
-        },
-      }
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/url/${userId}/histories`);
+    if (response.status === 200) {
+      return response.data;
+    }
+    return null;
+  } catch (err) {
+    console.log("Error" + err.message);
+  }
+};
+
+export const createShortenedLink = async (formData, userId) => {
+  try {
+    const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/url/shorten/${userId}`,
+      formData
     );
     if (response.status === 200) {
       return response.data;

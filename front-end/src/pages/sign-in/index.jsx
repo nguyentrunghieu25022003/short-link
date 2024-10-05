@@ -10,6 +10,7 @@ const SignIn = () => {
     try {
       const response = await handleSignIn({ email: email, password: password });
       if (response) {
+        localStorage.setItem("user-short-link", JSON.stringify(response.user));
         setEmail("");
         setPassword("");
         setTimeout(() => {

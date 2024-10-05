@@ -2,9 +2,20 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 const shortid = require("shortid");
 const Url = require("../../../models/url.model");
+const { getClientIP } = require("../../../helper/clientIP");
+
+module.exports.getAllShortenedLink = async (req, res) => {
+  try {
+    const urls = await Url.find({});
+    res.status(200).json(urls);
+  } catch (err) {
+    res.status(500).send("Error: " + err.message);
+  }
+};
 
 module.exports.createShortenedLink = async (req, res) => {
   try {
+    const { userId } = req.params;
     const { originalUrl } = req.body;
     const shortId = shortid.generate();
     const shortUrl = `${req.headers.host}/${shortId}`;
@@ -17,6 +28,7 @@ module.exports.createShortenedLink = async (req, res) => {
     const thumbnail = $('meta[property="og:image"]').attr("content") || null;
 
     const newUrl = new Url({
+      userId: userId,
       originalUrl: originalUrl,
       shortId: shortId,
       title: title,
@@ -62,23 +74,43 @@ module.exports.createShortenedLink = async (req, res) => {
   }
 };
 
-module.exports.handleGetLocation = async (req, res) => {
+module.exports.handleGetIPAddress = async (req, res) => {
+  try {
+    const ip = getClientIP(req);
+    res.status(200).json({ ip });
+  } catch (err) {
+    res.status(500).send("Error get IP: " + err.message);
+  }
+};
+
+module.exports.handleSaveIPAddressAndLocation = async (req, res) => {
   try {
     const { shortId } = req.params;
-    const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress || req.ip;
-    const locationResponse = await axios.get(`https://get.geojs.io/v1/ip/geo/${ip}.json`);
-    const locationInfo = locationResponse.data;
+    const ip = getClientIP(req);
+    const base64Location = req.query.data;
+    const decodedLocation = atob(base64Location);
+    const locationData = JSON.parse(decodedLocation);
 
-    const urlData = await Url.findOne({ shortId: shortId });
-    urlData.visits.push({
+    const url = await Url.findOne({ shortId: shortId });
+    url.visits.push({
       ip: ip,
-      location: locationInfo,
-      timestamp: Date.now(),
+      location: locationData
     });
-    urlData.save();
+    await url.save();
 
-    res.status(200).json({ locationInfo });
+    res.setHeader("Content-Type", "image/png");
+    res.status(200).send(Buffer.from([]));
   } catch (err) {
-    res.status(500).send("Error creating link: " + err.message);
+    res.status(500).send("Error save location: " + err.message);
+  }
+};
+
+module.exports.getUserHistories = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const urls = await Url.find({ userId: userId });
+    res.status(200).send(urls);
+  } catch (err) {
+    res.status(500).send("Error get user histories: " + err.message);
   }
 };

@@ -28,6 +28,14 @@ const Header = () => {
               <Link to="/" className="navbar-brand fs-1 fw-medium text-light">
                 Short Link
               </Link>
+              <div className="d-flex align-items-center gap-5" style={{ marginLeft: "40px" }}>
+                <Link to="/" className="nav-link fs-3 text-light fw-medium">
+                  Home
+                </Link>
+                <Link to="/histories" className="nav-link fs-3 text-light fw-medium">
+                  History
+                </Link>
+              </div>
               <button
                 className="navbar-toggler"
                 type="button"
@@ -43,16 +51,6 @@ const Header = () => {
                 <ul className="navbar-nav ms-auto">
                   { userToken ? (
                     <>
-                      <li className="nav-item">
-                        <Link to="/" className="nav-link fs-3 text-light fw-medium">
-                          Home
-                        </Link>
-                      </li>
-                      <li className="nav-item">
-                        <Link to="/history" className="nav-link fs-3 text-light fw-medium">
-                          History
-                        </Link>
-                      </li>
                       <li className="nav-item">
                         <span className="nav-link fs-3 text-light fw-medium" onClick={() => submitLogOutRequest()}>
                           Log out

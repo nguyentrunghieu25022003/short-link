@@ -1,28 +1,50 @@
-import { useState } from "react";
-import { createShortenedLink, getLocation } from "../../api/index";
+import { useEffect, useState } from "react";
+import { getAllShortenedLink, createShortenedLink, getUserIP, getUserLocation } from "../../api/index";
 
 const Home = () => {
   const [inputUrl, setInputUrl] = useState("");
-  const [shortenedLinkData, setShortenedLinkData] = useState(null);
-  const [userLocationInfo, setUserLocationInfo] = useState({});
+  const [shortenedLinks, setShortenedLinks] = useState([]);
+  const [isRefresh, setIsRefresh] = useState(false);
+  const userId = JSON.parse(localStorage.getItem("user-short-link")).id;
 
   const handleCreateShortenedLink = async (event) => {
     event.preventDefault();
     try {
-      const shortenedLinkResponse = await createShortenedLink({
-        originalUrl: inputUrl,
-      });
+      const shortenedLinkResponse = await createShortenedLink({ originalUrl: inputUrl }, userId);
       if(shortenedLinkResponse) {
-        console.log(shortenedLinkResponse?.shortId)
-        const locationResponse = await getLocation(shortenedLinkResponse?.shortId);
-        setShortenedLinkData(shortenedLinkResponse);
-        setUserLocationInfo(locationResponse);
         setInputUrl("");
+        setIsRefresh(!isRefresh);
       }
     } catch (err) {
       console.log("Error: " + err.message);
     }
   };
+
+  const handleGetIPAddressAndLocation = async (link) => {
+    try {
+      const ip = await getUserIP();
+      const location = await getUserLocation(ip);
+      const base64Location = btoa(JSON.stringify(location));
+      const imageUrl = `${import.meta.env.VITE_API_URL}/api/url/track-location/${link.shortId}?data=${base64Location}`;
+      const img = new Image();
+      img.src = imageUrl;
+      document.body.appendChild(img);
+      window.open(link.originalUrl, "_blank");
+    } catch (err) {
+      console.log("Error: " + err.message);
+    }
+  };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await getAllShortenedLink();
+        setShortenedLinks(response);
+      } catch (err) {
+        console.log("Error fetching" + err.message);
+      }
+    })();
+  }, [userId, isRefresh]);
 
   return (
     <div className="container mt-5">
@@ -44,49 +66,30 @@ const Home = () => {
           <button type="submit" className="btn btn-primary fs-4 fw-bold">Create</button>
         </div>
       </form>
-      {shortenedLinkData && (
-        <div className="card">
-          <div className="card-header bg-primary">
-            <h3 className="fs-2 fw-bold text-center text-light">Shortened Link Information</h3>
-          </div>
-          <div className="card-body">
-            <p className="fs-4 lh-lg">
-              <strong className="fs-4 fw-bold">Shortened Link:</strong>{" "}
-              <a
-                href={`https://${shortenedLinkData?.shortUrl}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="link-primary fs-4"
-              >
-                {shortenedLinkData.shortUrl}
-              </a>
-            </p>
-            <p className="fs-4 lh-lg">
-              <strong className="fs-4 fw-bold">Title:</strong> {shortenedLinkData?.title}
-            </p>
-            <p className="fs-4 lh-lg">
-              <strong className="fs-4 fw-bold">Description:</strong> {shortenedLinkData?.description ? shortenedLinkData?.description : "No description"}
-            </p>
-            <div className="d-flex flex-column mt-3">
-              <strong className="fs-4 fw-bold">Thumbnail</strong>
-              <img
-                src={shortenedLinkData.thumbnail}
-                alt="Thumbnail"
-                className="img-fluid mt-3"
-                width="400"
-              />
-            </div>
-            <p className="fs-4 lh-lg">
-              <strong className="fs-4 fw-bold">IP:</strong> {userLocationInfo?.locationInfo?.ip}
-            </p>
-            <p className="fs-4 lh-lg">
-              <strong className="fs-4 fw-bold">Address:</strong>{" "}
-              {userLocationInfo?.locationInfo?.city},{" "}
-              {userLocationInfo?.locationInfo?.country}
-            </p>
-          </div>
-        </div>
-      )}
+      <table className="table table-hover">
+        <thead>
+          <tr className="fs-3 fw-medium text-dark table-dark">
+            <th>#</th>
+            <th>Shortened Link</th>
+            <th>Original Link</th>
+            <th>Created At</th>
+          </tr>
+        </thead>
+        <tbody>
+          {shortenedLinks.map((link, index) => (
+            <tr key={index} className="fs-4 fw-normal text-dark table-light align-middle">
+              <td>{index + 1}</td>
+              <td>
+                <span className="link-primary" onClick={() => handleGetIPAddressAndLocation(link)}>
+                  {import.meta.env.VITE_API_URL}/{link.shortId}
+                </span>
+              </td>
+              <td className="text-truncate" style={{ maxWidth: "450px" }}>{link.originalUrl}</td>
+              <td>{new Date(link.createdAt).toLocaleString()}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
