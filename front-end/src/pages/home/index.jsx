@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { getAllShortenedLink, createShortenedLink, getUserIP, getUserLocation } from "../../api/index";
+import {
+  getAllShortenedLink,
+  createShortenedLink,
+  getUserIP,
+  getUserLocation,
+} from "../../api/index";
 import Loading from "../../components/loading/index";
 
 const Home = () => {
@@ -13,7 +18,10 @@ const Home = () => {
     event.preventDefault();
     setIsLoading(true);
     try {
-      const shortenedLinkResponse = await createShortenedLink({ originalUrl: inputUrl }, userId);
+      const shortenedLinkResponse = await createShortenedLink(
+        { originalUrl: inputUrl },
+        userId
+      );
       if (shortenedLinkResponse) {
         setInputUrl("");
         setIsRefreshing(!isRefreshing);
@@ -30,7 +38,9 @@ const Home = () => {
       const ip = await getUserIP();
       const location = await getUserLocation(ip);
       const base64Location = btoa(JSON.stringify(location));
-      const imageUrl = `${import.meta.env.VITE_API_URL}/api/url/track-location/${link.shortId}?data=${base64Location}`;
+      const imageUrl = `${
+        import.meta.env.VITE_API_URL
+      }/api/url/track-location/${link.shortId}?data=${base64Location}`;
       const img = new Image();
       img.src = imageUrl;
       document.body.appendChild(img);
@@ -54,9 +64,9 @@ const Home = () => {
     })();
   }, [userId, isRefreshing]);
 
-  if(isLoading) {
+  if (isLoading) {
     return <Loading />;
-  };
+  }
 
   return (
     <div className="container mt-5">
@@ -75,43 +85,60 @@ const Home = () => {
             placeholder="URL..."
             required
           />
-          <button type="submit" className="btn btn-primary fs-4 fw-bold" disabled={isLoading}>
+          <button
+            type="submit"
+            className="btn btn-primary fs-4 fw-bold"
+            disabled={isLoading}
+          >
             {isLoading ? "Creating..." : "Create"}
           </button>
         </div>
       </form>
-      <table className="table table-hover table-bordered">
-        <thead>
-          <tr className="fs-3 fw-medium text-dark table-dark">
-            <th>#</th>
-            <th>Shortened Link</th>
-            <th>Original Link</th>
-            <th>Created At</th>
-          </tr>
-        </thead>
-        <tbody>
-          {shortenedLinks.map((link, index) => (
-            <tr key={index} className="fs-4 fw-normal text-dark table-light align-middle">
-              <td>{index + 1}</td>
-              <td>
-                <a
-                  href={`${import.meta.env.VITE_API_URL}/api/url/shorten/${link.shortId}`}
-                  target="_blank"
-                  className="link-primary"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => handleGetIPAddressAndLocation(link)}
-                >
-                  {import.meta.env.VITE_API_URL}/api/url/{link.shortId}
-                </a>
-              </td>
-              <td className="text-truncate" style={{ maxWidth: "450px" }}>
-                <a href={link.originalUrl} target="_blank" className="text-decoration-none text-dark">{link.originalUrl}</a>
-              </td>
-              <td>{new Date(link.createdAt).toLocaleString()}</td>
+      <div className="table-responsive">
+        <table className="table table-hover table-bordered">
+          <thead>
+            <tr className="fs-3 fw-medium table-primary">
+              <th className="text-light">#</th>
+              <th className="text-light">Shortened Link</th>
+              <th className="text-light">Original Link</th>
+              <th className="text-light">Created At</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {shortenedLinks.map((link, index) => (
+              <tr
+                key={index}
+                className="fs-4 fw-normal text-dark table-light align-middle"
+              >
+                <td>{index + 1}</td>
+                <td className="text-truncate" style={{ maxWidth: "150px" }}>
+                  <a
+                    href={`${import.meta.env.VITE_API_URL}/api/url/shorten/${
+                      link.shortId
+                    }`}
+                    target="_blank"
+                    className="link-primary"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => handleGetIPAddressAndLocation(link)}
+                  >
+                    {import.meta.env.VITE_API_URL}/api/url/{link.shortId}
+                  </a>
+                </td>
+                <td className="text-truncate" style={{ maxWidth: "250px" }}>
+                  <a
+                    href={link.originalUrl}
+                    target="_blank"
+                    className="text-decoration-none text-dark"
+                  >
+                    {link.originalUrl}
+                  </a>
+                </td>
+                <td>{new Date(link.createdAt).toLocaleString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

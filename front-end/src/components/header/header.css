@@ -1,0 +1,18 @@
+.custom-canvas {
+    max-width: 250px;
+}
+
+.custom-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.log-out-item:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.table-heading {
+    color: #ffffff;
+}
