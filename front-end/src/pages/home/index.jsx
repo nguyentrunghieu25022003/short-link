@@ -101,7 +101,7 @@ const Home = () => {
                   style={{ cursor: "pointer" }}
                   onClick={() => handleGetIPAddressAndLocation(link)}
                 >
-                  {import.meta.env.VITE_API_URL}/{link.shortId}
+                  {import.meta.env.VITE_API_URL}/api/url/{link.shortId}
                 </a>
               </td>
               <td className="text-truncate" style={{ maxWidth: "450px" }}>
