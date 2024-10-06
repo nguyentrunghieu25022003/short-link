@@ -4,19 +4,23 @@ import { getAllShortenedLink, createShortenedLink, getUserIP, getUserLocation } 
 const Home = () => {
   const [inputUrl, setInputUrl] = useState("");
   const [shortenedLinks, setShortenedLinks] = useState([]);
-  const [isRefresh, setIsRefresh] = useState(false);
-  const userId = JSON.parse(localStorage.getItem("user-short-link")).id;
+  const [isLoading, setIsLoading] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const userId = JSON.parse(localStorage.getItem("user-short-link"))?.id;
 
   const handleCreateShortenedLink = async (event) => {
     event.preventDefault();
+    setIsLoading(true);
     try {
       const shortenedLinkResponse = await createShortenedLink({ originalUrl: inputUrl }, userId);
-      if(shortenedLinkResponse) {
+      if (shortenedLinkResponse) {
         setInputUrl("");
-        setIsRefresh(!isRefresh);
+        setIsRefreshing(!isRefreshing);
       }
     } catch (err) {
       console.log("Error: " + err.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -29,7 +33,7 @@ const Home = () => {
       const img = new Image();
       img.src = imageUrl;
       document.body.appendChild(img);
-      window.open(link.originalUrl, "_blank");
+      console.log("Get IP address and location successfully !");
     } catch (err) {
       console.log("Error: " + err.message);
     }
@@ -41,10 +45,10 @@ const Home = () => {
         const response = await getAllShortenedLink();
         setShortenedLinks(response);
       } catch (err) {
-        console.log("Error fetching" + err.message);
+        console.log("Error fetching: " + err.message);
       }
     })();
-  }, [userId, isRefresh]);
+  }, [userId, isRefreshing]);
 
   return (
     <div className="container mt-5">
@@ -63,10 +67,13 @@ const Home = () => {
             placeholder="URL..."
             required
           />
-          <button type="submit" className="btn btn-primary fs-4 fw-bold">Create</button>
+          <button type="submit" className="btn btn-primary fs-4 fw-bold" disabled={isLoading}>
+            {isLoading ? "Creating..." : "Create"}
+          </button>
         </div>
       </form>
-      <table className="table table-hover">
+      
+      <table className="table table-hover table-bordered">
         <thead>
           <tr className="fs-3 fw-medium text-dark table-dark">
             <th>#</th>
@@ -80,9 +87,15 @@ const Home = () => {
             <tr key={index} className="fs-4 fw-normal text-dark table-light align-middle">
               <td>{index + 1}</td>
               <td>
-                <span className="link-primary" onClick={() => handleGetIPAddressAndLocation(link)}>
+                <a
+                  href={`${import.meta.env.VITE_API_URL}/api/url/redirect/${link.shortId}`}
+                  target="_blank"
+                  className="link-primary"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => handleGetIPAddressAndLocation(link)}
+                >
                   {import.meta.env.VITE_API_URL}/{link.shortId}
-                </span>
+                </a>
               </td>
               <td className="text-truncate" style={{ maxWidth: "450px" }}>{link.originalUrl}</td>
               <td>{new Date(link.createdAt).toLocaleString()}</td>

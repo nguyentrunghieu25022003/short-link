@@ -10,7 +10,6 @@ const SignIn = () => {
     try {
       const response = await handleSignIn({ email: email, password: password });
       if (response) {
-        console.log("Import meta", import.meta.env.VITE_API_URL);
         localStorage.setItem("user-short-link", JSON.stringify(response.user));
         setEmail("");
         setPassword("");
