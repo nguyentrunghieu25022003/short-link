@@ -92,10 +92,9 @@ module.exports.handleRedirectShortenedLink = async (req, res) => {
       return res.status(404).send("Shortened link not found.");
     }
 
-    const userAgent = req.headers["user-agent"] || "";
-    const isSocialMediaCrawler = /facebookexternalhit|Twitterbot|Slackbot/.test(userAgent);
+    const acceptHeader = req.headers.accept || "";
 
-    if (isSocialMediaCrawler) {
+    if (acceptHeader.includes("text/html")) {
       res.status(200).send(`
         <!DOCTYPE html>
         <html lang="en">
@@ -105,7 +104,7 @@ module.exports.handleRedirectShortenedLink = async (req, res) => {
             <meta property="og:title" content="${urlData.title || 'No Title'}" />
             <meta property="og:description" content="${urlData.description || 'No Description'}" />
             <meta property="og:image" content="${urlData.thumbnail || 'default-thumbnail.jpg'}" />
-            <meta property="og:url" content="${req.protocol}://${req.headers.host}/${urlData.shortId}" />
+            <meta property="og:url" content="${req.headers.host}/${urlData.shortId}" />
             <meta property="og:type" content="website" />
             <title>${urlData.title || 'No Title'}</title>
           </head>
@@ -116,7 +115,8 @@ module.exports.handleRedirectShortenedLink = async (req, res) => {
           </body>
         </html>
       `);
-    } else {
+    } 
+    else {
       res.redirect(urlData.originalUrl);
     }
   } catch (err) {
