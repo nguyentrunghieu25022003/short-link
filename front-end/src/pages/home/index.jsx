@@ -95,7 +95,7 @@ const Home = () => {
               <td>{index + 1}</td>
               <td>
                 <a
-                  href={`${import.meta.env.VITE_API_URL}/api/url/redirect/${link.shortId}`}
+                  href={`${import.meta.env.VITE_API_URL}/api/url/shorten/${link.shortId}`}
                   target="_blank"
                   className="link-primary"
                   style={{ cursor: "pointer" }}
