@@ -53,7 +53,7 @@ const Histories = () => {
                   className="link-primary"
                   style={{ cursor: "pointer" }}
                 >
-                  {import.meta.env.VITE_API_URL}/{link.shortId}
+                  {import.meta.env.VITE_API_URL}/api/{link.shortId}
                 </a>
               </td>
                 <td className="text-truncate" style={{ maxWidth: "450px" }}>

@@ -93,6 +93,7 @@ module.exports.handleRedirectShortenedLink = async (req, res) => {
     }
 
     const acceptHeader = req.headers.accept || "";
+    console.log("User-Agent:", req.headers["user-agent"]);
 
     if (acceptHeader.includes("text/html")) {
       res.status(200).send(`
@@ -115,8 +116,7 @@ module.exports.handleRedirectShortenedLink = async (req, res) => {
           </body>
         </html>
       `);
-    } 
-    else {
+    } else {
       res.redirect(urlData.originalUrl);
     }
   } catch (err) {
