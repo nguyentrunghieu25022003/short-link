@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAllShortenedLink, createShortenedLink, getUserIP, getUserLocation } from "../../api/index";
+import Loading from "../../components/loading/index";
 
 const Home = () => {
   const [inputUrl, setInputUrl] = useState("");
@@ -41,14 +42,21 @@ const Home = () => {
 
   useEffect(() => {
     (async () => {
+      setIsLoading(true);
       try {
         const response = await getAllShortenedLink();
         setShortenedLinks(response);
       } catch (err) {
         console.log("Error fetching: " + err.message);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, [userId, isRefreshing]);
+
+  if(isLoading) {
+    return <Loading />;
+  };
 
   return (
     <div className="container mt-5">
@@ -96,7 +104,9 @@ const Home = () => {
                   {import.meta.env.VITE_API_URL}/{link.shortId}
                 </a>
               </td>
-              <td className="text-truncate" style={{ maxWidth: "450px" }}>{link.originalUrl}</td>
+              <td className="text-truncate" style={{ maxWidth: "450px" }}>
+                <a href={link.originalUrl} target="_blank" className="text-decoration-none text-dark">{link.originalUrl}</a>
+              </td>
               <td>{new Date(link.createdAt).toLocaleString()}</td>
             </tr>
           ))}

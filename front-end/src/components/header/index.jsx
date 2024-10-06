@@ -25,10 +25,10 @@ const Header = () => {
         <div className="row">
           <nav className="navbar navbar-expand-lg navbar-light">
             <div className="container-fluid">
-              <Link to="/" className="navbar-brand fs-1 fw-medium text-light">
-                Short Link
-              </Link>
-              <div className="d-flex align-items-center gap-5" style={{ marginLeft: "40px" }}>
+              <div className="d-flex align-items-center gap-5" >
+                <Link to="/" className="navbar-brand fs-1 fw-medium text-light">
+                  Short Link
+                </Link>
                 <Link to="/" className="nav-link fs-3 text-light fw-medium">
                   Home
                 </Link>
@@ -36,18 +36,7 @@ const Header = () => {
                   History
                 </Link>
               </div>
-              <button
-                className="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarNav"
-                aria-controls="navbarNav"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-              >
-                <span className="navbar-toggler-icon"></span>
-              </button>
-              <div className="collapse navbar-collapse" id="navbarNav">
+              <div>
                 <ul className="navbar-nav ms-auto">
                   { userToken ? (
                     <>
