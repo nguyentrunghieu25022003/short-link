@@ -72,7 +72,6 @@ const Home = () => {
           </button>
         </div>
       </form>
-      
       <table className="table table-hover table-bordered">
         <thead>
           <tr className="fs-3 fw-medium text-dark table-dark">

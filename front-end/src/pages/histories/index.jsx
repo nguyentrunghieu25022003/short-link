@@ -21,6 +21,7 @@ const Histories = () => {
             <th>Shortened Link</th>
             <th>Original Link</th>
             <th>Created At</th>
+            <th>IP</th>
           </tr>
         </thead>
         <tbody>
@@ -39,6 +40,15 @@ const Histories = () => {
                 {link.originalUrl}
               </td>
               <td>{new Date(link.createdAt).toLocaleString()}</td>
+              <td>
+                <ul>
+                  {link.visits.map((item, index) => {
+                    return (
+                      <li key={index}>{item.ip}</li>
+                    );
+                  })}
+                </ul>
+              </td>
             </tr>
           ))}
         </tbody>

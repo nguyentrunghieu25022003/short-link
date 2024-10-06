@@ -19,6 +19,7 @@ const corsOptions = {
 };
 
 mongodb.connect();
+app.set("trust proxy", true);
 app.use(morgan("combined"));
 app.use(cors(corsOptions));
 app.options("*", cors(corsOptions));
@@ -27,7 +28,6 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
-app.set("trust proxy", true);
 
 routes(app);
 
