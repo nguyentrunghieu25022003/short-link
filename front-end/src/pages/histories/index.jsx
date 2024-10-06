@@ -47,10 +47,15 @@ const Histories = () => {
               >
                 <td>{index + 1}</td>
                 <td>
-                  <span className="link-primary">
-                    {import.meta.env.VITE_API_URL}/{link.shortId}
-                  </span>
-                </td>
+                <a
+                  href={`${import.meta.env.VITE_API_URL}/api/url/redirect/${link.shortId}`}
+                  target="_blank"
+                  className="link-primary"
+                  style={{ cursor: "pointer" }}
+                >
+                  {import.meta.env.VITE_API_URL}/{link.shortId}
+                </a>
+              </td>
                 <td className="text-truncate" style={{ maxWidth: "450px" }}>
                   <a href={link.originalUrl} target="_blank" className="text-decoration-none text-dark">{link.originalUrl}</a>
                 </td>
