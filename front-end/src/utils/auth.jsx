@@ -16,10 +16,6 @@ const useAuthToken = () => {
         );
         if (response.status === 200) {
           console.log("Check token successfully");
-          const check = localStorage.getItem("user-short-link");
-          if (!check) {
-            localStorage.setItem("user-short-link",JSON.stringify(response.data.user));
-          }
           setUserToken(true);
           setIsLoading(false);
         } else {

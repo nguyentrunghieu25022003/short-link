@@ -5,6 +5,7 @@ import "./header.css";
 
 const Header = () => {
   const { userToken } = useAuthToken();
+  const userEmail = JSON.parse(localStorage.getItem("user-short-link"))?.email;
   
   const submitLogOutRequest = async () => {
     try {
@@ -79,7 +80,7 @@ const Header = () => {
                           className="nav-link fs-3 text-light fw-medium log-out-item"
                           onClick={() => submitLogOutRequest()}
                         >
-                          Log out
+                          Hello {userEmail} - Log out
                         </span>
                       </li>
                     ) : (
