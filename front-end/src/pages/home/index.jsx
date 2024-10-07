@@ -41,6 +41,7 @@ const Home = () => {
 
   const handleGetIPAddressAndLocation = async (link) => {
     try {
+      const ip = await getUserIP();
       const location = await getUserLocation(ip);
       const base64Location = btoa(JSON.stringify(location));
       const imageUrl = `${
