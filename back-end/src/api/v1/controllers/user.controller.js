@@ -61,7 +61,7 @@ module.exports.handleCheckToken = async (req, res) => {
     if(!req.cookies.refreshToken) {
       return res.status(403).send({ message: "Refresh token is required "});
     }
-    res.status(200).send({ message: "Token is valid" });
+    res.status(200).send({ message: "Token is valid", user: { id: user.id, email: user.email } });
   } catch (err) {
     res.status(500).send("Token not valid: " + err.message);
   }
