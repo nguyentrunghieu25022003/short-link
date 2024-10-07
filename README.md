@@ -78,7 +78,7 @@ Before running this project, make sure you have the following installed:
    MONGODB_URL=your-mongodb-connection-string
    JWT_ACCESS_SECRET=your-jwt-secret
    JWT_REFRESH_SECRET=your-jwt-refresh-secret
-   CLIENT_URL=http://localhost:3000
+   CLIENT_URL=http://localhost:5173
    NODE_ENV=development
    ```
 
@@ -98,13 +98,13 @@ Before running this project, make sure you have the following installed:
      npm start
      ```
 
-6. Open your browser and navigate to `http://localhost:3001`.
+6. Open your browser and navigate to `http://localhost:5173`.
 
 ## API Endpoints
-
-- **POST /api/url/shorten** - Create a new shortened URL
-- **GET /api/url/redirect/:shortId** - Redirect to the original URL using the short link
-- **GET /api/url/histories/:userId** - Get the list of shortened URLs created by a user
+- **GET /track-location/:shortId** - Save the location and ip address
+- **POST /api/url/shorten/:userId** - Create a new shortened URL
+- **GET /api/url/shorten/:shortId** - Redirect to the original URL using the short link
+- **GET /api/url/:userId/histories** - Get the list of shortened URLs created by a user
 
 ## Usage
 
@@ -116,15 +116,5 @@ Before running this project, make sure you have the following installed:
 ## Screenshots
 
 ### Home Page
-
-![Home Page](./img-preview/screenshot_1728216518.png)
-
-### History Page
-
-![History Page](./img-preview/screenshot_1728216551.png)
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ![Screenshot](./img-review/screenshot_1728216202.png)
