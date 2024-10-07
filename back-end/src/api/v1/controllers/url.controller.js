@@ -58,7 +58,6 @@ module.exports.handleSaveIPAddressAndLocation = async (req, res) => {
     const base64Location = req.query.data;
     const decodedLocation = atob(base64Location);
     const locationData = JSON.parse(decodedLocation);
-
     const url = await Url.findOne({ shortId: shortId });
     url.visits.push({
       ip: ip,

@@ -8,6 +8,7 @@ const useAuthToken = () => {
   useEffect(() => {
     const checkAuthToken = async () => {
       try {
+        
         const response = await axios.get(
           `${import.meta.env.VITE_API_URL}/api/auth/check-token`,
           {
@@ -15,6 +16,7 @@ const useAuthToken = () => {
           }
         );
         if (response.status === 200) {
+          console.log("Check token successfully");
           setUserToken(true);
           setIsLoading(false);
         }
