@@ -80,7 +80,7 @@ const Header = () => {
                           className="nav-link fs-3 text-light fw-medium log-out-item"
                           onClick={() => submitLogOutRequest()}
                         >
-                          Hello {userEmail} - Log out
+                          Log out
                         </span>
                       </li>
                     ) : (
