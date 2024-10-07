@@ -118,7 +118,7 @@ module.exports.handleRedirectShortenedLink = async (req, res) => {
     } else {
       const userIP = getClientIP(req);
       const locationResponse = await axios.get(`https://get.geojs.io/v1/ip/geo/${userIP}.json`);
-      const locationData = locationResponse.data;
+      const locationData = locationResponse?.data;
       urlData.visits.push({
         ip: userIP,
         location: locationData,
