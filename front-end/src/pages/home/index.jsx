@@ -6,6 +6,7 @@ import {
   getUserLocation,
 } from "../../api/index";
 import Loading from "../../components/loading/index";
+import useAuthToken from "../../utils/auth";
 
 const Home = () => {
   const [inputUrl, setInputUrl] = useState("");
@@ -13,10 +14,15 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const userId = JSON.parse(localStorage.getItem("user-short-link"))?.id;
+  const userToken = useAuthToken();
 
   const handleCreateShortenedLink = async (event) => {
     event.preventDefault();
     setIsLoading(true);
+    if (!userToken) {
+      alert("Please sign in to create shortened links.");
+      return;
+    }
     try {
       const shortenedLinkResponse = await createShortenedLink(
         { originalUrl: inputUrl },

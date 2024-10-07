@@ -5,12 +5,12 @@ import Home from "../pages/home/index";
 import Histories from "../pages/histories/index";
 
 const publicRoutes = [
+    { path: "/", component: Home, layout: DefaultLayout },
     { path: "/sign-in", component: SignIn, layout: DefaultLayout },
     { path: "/sign-up", component: SignUp, layout: DefaultLayout },
 ]
 
 const privateRoutes = [
-    { path: "/", component: Home, layout: DefaultLayout },
     { path: "/histories", component: Histories, layout: DefaultLayout }
 ];
 
