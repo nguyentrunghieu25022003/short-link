@@ -13,6 +13,7 @@ const Home = () => {
   const [shortenedLinks, setShortenedLinks] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [ip, setIp] = useState(0);
   const userId = JSON.parse(localStorage.getItem("user-short-link"))?.id;
   const userToken = useAuthToken();
 
@@ -42,6 +43,7 @@ const Home = () => {
   const handleGetIPAddressAndLocation = async (link) => {
     try {
       const ip = await getUserIP();
+      setIp(ip);
       const location = await getUserLocation(ip);
       const base64Location = btoa(JSON.stringify(location));
       const imageUrl = `${
@@ -76,6 +78,7 @@ const Home = () => {
 
   return (
     <div className="container mt-5">
+      <strong>{ip}</strong>
       <form onSubmit={handleCreateShortenedLink} className="mb-5">
         <label htmlFor="inputUrl" className="form-label fs-4">
           Enter the URL to shorten:
