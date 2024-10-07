@@ -16,3 +16,8 @@
 .table-heading {
     color: #ffffff;
 }
+
+.navbar-custom {
+    min-width: 200px;
+    padding-left: 20px;
+}

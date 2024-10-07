@@ -73,7 +73,7 @@ const Histories = () => {
                     <ul style={{ maxHeight: "100px", overflowY: "auto" }}>
                       {link.visits.map((item, idx) => (
                         <li key={idx} className="pt-2 pb-2">
-                          {idx + 1}{")"} <strong className="fw-bold">{item?.ip}</strong> - {item?.location?.region}, {" "} {item?.location?.country}
+                          {idx + 1}{")"} <strong className="fw-bold">{item?.ip}</strong> - {item?.location?.region}, {" "} {item?.location?.country} - {new Date(item.timestamp).toLocaleString()}
                         </li>
                       ))}
                     </ul>

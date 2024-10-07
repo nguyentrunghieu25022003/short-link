@@ -71,8 +71,7 @@ const Header = () => {
                       </Link>
                     </li>
                   </ul>
-
-                  <ul className="navbar-nav ms-auto">
+                  <ul className="navbar-nav ms-auto navbar-custom">
                     {userToken ? (
                       <li className="nav-item">
                         <span
@@ -84,18 +83,18 @@ const Header = () => {
                       </li>
                     ) : (
                       <>
-                        <li className="nav-item">
+                        <li className="nav-item pr-5">
                           <Link
                             to="/sign-in"
-                            className="nav-link fs-3 text-dark fw-medium"
+                            className="nav-link fs-3 text-light fw-medium"
                           >
-                            Sign in
+                            Sign in /
                           </Link>
                         </li>
                         <li className="nav-item">
                           <Link
                             to="/sign-up"
-                            className="nav-link fs-3 text-dark fw-medium"
+                            className="nav-link fs-3 text-light fw-medium"
                           >
                             Sign up
                           </Link>
