@@ -116,6 +116,12 @@ module.exports.handleRedirectShortenedLink = async (req, res) => {
         </html>
       `);
     } else {
+      const userIP = getClientIP(req);
+      urlData.visits.push({
+        ip: userIP,
+        timestamp: new Date()
+      });
+      await urlData.save();
       res.redirect(urlData.originalUrl);
     }
   } catch (err) {
