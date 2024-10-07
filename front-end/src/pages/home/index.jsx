@@ -78,7 +78,7 @@ const Home = () => {
 
   return (
     <div className="container mt-5">
-      <strong>{ip}</strong>
+      <strong className="fs-2 fw-bold d-block pb-2">IP: {ip}</strong>
       <form onSubmit={handleCreateShortenedLink} className="mb-5">
         <label htmlFor="inputUrl" className="form-label fs-4">
           Enter the URL to shorten:
