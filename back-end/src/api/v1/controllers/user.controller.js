@@ -58,8 +58,8 @@ module.exports.handleSignIn = async (req, res) => {
 
 module.exports.handleCheckToken = async (req, res) => {
   try {
-    if(!req.cookies.refreshToken) {
-      return res.status(403).send({ message: "Refresh token is required "});
+    if (!req.cookies || !req.cookies.refreshToken) {
+      return res.status(403).send({ message: "Refresh token is required" });
     }
     res.status(200).send({ message: "Token is valid" });
   } catch (err) {
@@ -69,8 +69,12 @@ module.exports.handleCheckToken = async (req, res) => {
 
 module.exports.handleLogOut = async (req, res) => {
   try {
-    res.clearCookie("accessToken");
-    res.clearCookie("refreshToken");
+    res.clearCookie("accessToken", { path: "/", httpOnly: true, secure: true });
+    res.clearCookie("refreshToken", {
+      path: "/",
+      httpOnly: true,
+      secure: true,
+    });
     res.status(200).send({ message: "Logged out successful" });
   } catch (err) {
     res.status(500).send("Error logging out: " + err.message);
