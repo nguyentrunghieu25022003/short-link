@@ -4,7 +4,7 @@ const { createAccessToken } = require("./jwt");
 const authenticateToken = async (req, res, next) => {
   const accessToken = req.cookies.accessToken;
   const refreshToken = req.cookies.refreshToken;
-
+  console.log("Token: ", accessToken, refreshToken);
   if (!accessToken && !refreshToken) {
     return res.status(401).json({ message: "No token provided." });
   }
