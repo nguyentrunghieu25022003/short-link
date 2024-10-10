@@ -62,7 +62,7 @@ module.exports.handleCheckToken = async (req, res) => {
     if (!token) {
       return res.status(401).json({ message: "Token is required" });
     }
-    res.json({ message: "Success" });
+    res.json({ message: "Success", token: token });
   } catch (err) {
     res.status(500).send("Message: " + err.message);
   }

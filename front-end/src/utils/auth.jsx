@@ -15,6 +15,7 @@ const useAuthToken = () => {
           }
         );
         if (response.status === 200) {
+          console.log(response.token)
           console.log("Check token successfully");
           setUserToken(true);
           setIsLoading(false);
