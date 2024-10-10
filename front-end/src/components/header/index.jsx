@@ -2,9 +2,11 @@ import { Link } from "react-router-dom";
 import useAuthToken from "../../utils/auth";
 import { handleLogOut } from "../../api/index";
 import "./header.css";
+import { useState } from "react";
 
 const Header = () => {
-  const { userToken } = useAuthToken();
+  const { userToken: initialUserToken } = useAuthToken();
+  const [userToken, setUserToken] = useState(initialUserToken);
   
   const submitLogOutRequest = async () => {
     try {
@@ -12,6 +14,7 @@ const Header = () => {
       if(response) {
         localStorage.removeItem("user-short-link");
         console.log("Logged out successfully !");
+        setUserToken(false);
         setTimeout(() => {
           window.location.reload();
         }, 3000);
