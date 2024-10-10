@@ -9,24 +9,17 @@ const useAuthToken = () => {
     const checkAuthToken = async () => {
       setIsLoading(true);
       try {
-        const accessToken = localStorage.getItem("accessToken");
-  
-        if (accessToken) {
-          const response = await axios.get(
-            `${import.meta.env.VITE_API_URL}/api/auth/check-token`,
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-              withCredentials: true,
-            }
-          );
-
-          if (response.status === 200) {
-            console.log("Token is valid", response.data.token);
-            setUserToken(true);
-            return;
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/auth/check-token`,
+          {
+            withCredentials: true,
           }
+        );
+
+        if (response.status === 200) {
+          console.log("Token is valid", response.data.token);
+          setUserToken(true);
+          return;
         }
 
         const refreshToken = localStorage.getItem("refreshToken");

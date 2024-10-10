@@ -64,8 +64,7 @@ module.exports.handleSignIn = async (req, res) => {
 
 module.exports.handleCheckToken = async (req, res) => {
   try {
-    const authHeader = req.headers["authorization"];
-    const accessToken = authHeader && authHeader.split(" ")[1] || req.cookies.accessToken;
+    const accessToken = req.cookies.accessToken;
     if (!accessToken) {
       return res.status(401).json({ message: "Token is required" });
     }
