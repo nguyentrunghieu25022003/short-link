@@ -88,10 +88,13 @@ export const handleSignUp = async (formData) => {
   }
 };
 
-export const handleLogOut = async () => {
+export const handleLogOut = async (accessToken) => {
   try {
     const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/log-out`, {
-      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      withCredentials: true
     });
     if (response.status === 200) {
       return response.data;
