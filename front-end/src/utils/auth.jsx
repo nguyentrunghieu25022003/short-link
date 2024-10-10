@@ -19,7 +19,7 @@ const useAuthToken = () => {
           }
         );
 
-        if (response.status === 200 && response.data.token) {
+        if (response.status === 200 && response.data.token.accessToken && response.data.token.refreshToken) {
           console.log("Token is valid", response.data.token);
           setUserToken(true);
         } else {
