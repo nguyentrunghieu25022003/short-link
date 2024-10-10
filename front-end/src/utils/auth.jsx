@@ -21,7 +21,7 @@ const useAuthToken = () => {
         );
 
         if (response.status === 200) {
-          console.log("Token is valid", response.data.token);
+          console.log("Token is valid", response.data.accessToken);
           setUserToken(true);
         } else {
           setUserToken(false);
