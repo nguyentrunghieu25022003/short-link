@@ -59,10 +59,10 @@ module.exports.handleSignIn = async (req, res) => {
 module.exports.handleCheckToken = async (req, res) => {
   try {
     const token = req.cookies.accessToken;
-    if (!token) {
+    if (token === undefined || token === null) {
       return res.status(401).json({ message: "Token is required" });
     }
-    res.json({ message: "Success", token: token });
+    res.json({ message: "Success" });
   } catch (err) {
     res.status(500).send("Message: " + err.message);
   }
@@ -73,11 +73,11 @@ module.exports.releaseAccessToken = async (req, res) => {
     const accessToken = req.cookies.accessToken;
     const refreshToken = req.cookies.refreshToken;
 
-    if (!refreshToken) {
+    if (refreshToken === undefined || refreshToken === null) {
       return res.status(403).json({ message: "Refresh token is required" });
     }
 
-    if(!accessToken) {
+    if(accessToken === undefined || accessToken === null) {
       jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, (err, decodedRefresh) => {
         if (err) {
           return res.status(403).json({ message: "Invalid refresh token, please log in again." });
