@@ -4,7 +4,7 @@ const { createAccessToken } = require("./jwt");
 const authenticateToken = async (req, res, next) => {
   const accessToken = req.cookies.accessToken;
   const refreshToken = req.cookies.refreshToken;
-  if (!accessToken && !refreshToken) {
+  if (accessToken === undefined && refreshToken === undefined) {
     return res.status(401).json({ message: "No token provided." });
   }
   try {
@@ -15,7 +15,7 @@ const authenticateToken = async (req, res, next) => {
     if (error.name === "JsonWebTokenError" && refreshToken) {
       try {
         const decodedRefresh = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
-        const newAccessToken = createAccessToken(decodedRefresh.userEmail);
+        const newAccessToken = createAccessToken(decodedRefresh.id);
         console.log("Created new access token !");
         res.cookie("accessToken", newAccessToken, {
           httpOnly: true,
