@@ -90,6 +90,7 @@ export const handleSignUp = async (formData) => {
 
 export const handleLogOut = async (accessToken) => {
   try {
+    console.log(accessToken)
     const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/log-out`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
