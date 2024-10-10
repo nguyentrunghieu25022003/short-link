@@ -65,14 +65,14 @@ const Header = () => {
                         Home
                       </Link>
                     </li>
-                    <li className="nav-item">
+                    {user && <li className="nav-item">
                       <Link
                         to="/histories"
                         className="nav-link fs-3 text-light fw-medium"
                       >
                         History
                       </Link>
-                    </li>
+                    </li>}
                   </ul>
                   <ul className="navbar-nav ms-auto navbar-custom">
                     {user ? (
