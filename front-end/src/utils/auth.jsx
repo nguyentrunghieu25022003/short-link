@@ -7,58 +7,62 @@ const useAuthToken = () => {
 
   useEffect(() => {
     const checkAuthToken = async () => {
+      setIsLoading(true);
       try {
         const accessToken = localStorage.getItem("accessToken");
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/auth/check-token`,
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-            withCredentials: true
+  
+        if (accessToken) {
+          const response = await axios.get(
+            `${import.meta.env.VITE_API_URL}/api/auth/check-token`,
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+              withCredentials: true,
+            }
+          );
+
+          if (response.status === 200) {
+            console.log("Token is valid", response.data.token);
+            setUserToken(true);
+            return;
           }
-        );
-
-        if (response.status === 200 && response.data.token.accessToken && response.data.token.refreshToken) {
-          console.log("Token is valid", response.data.token);
-          setUserToken(true);
-        } else {
-          console.log("Token is invalid or not found");
-          setUserToken(false);
         }
-      } catch (error) {
-        console.log("Access token expired, attempting refresh", error);
 
-        try {
-          const refreshToken = localStorage.getItem("refreshToken");
+        const refreshToken = localStorage.getItem("refreshToken");
+        if (refreshToken) {
           const refreshTokenResponse = await axios.get(
             `${import.meta.env.VITE_API_URL}/api/auth/refresh-token`,
             {
               headers: {
                 Authorization: `Bearer ${refreshToken}`,
               },
-              withCredentials: true
+              withCredentials: true,
             }
           );
 
-          if (refreshTokenResponse.status === 200 && refreshTokenResponse.data.token) {
+          if (refreshTokenResponse.status === 200 && refreshTokenResponse.data.accessToken) {
             console.log("Refresh token successful");
+            localStorage.setItem("accessToken", refreshTokenResponse.data.accessToken);
             setUserToken(true);
           } else {
             console.log("Refresh token failed");
             setUserToken(false);
           }
-        } catch (refreshError) {
-          console.log("Refresh token failed, logging out", refreshError);
+        } else {
+          console.log("No refresh token found");
           setUserToken(false);
         }
+      } catch (error) {
+        console.error("Error checking tokens", error);
+        setUserToken(false);
       } finally {
         setIsLoading(false);
       }
     };
 
     checkAuthToken();
-  }, [userToken, isLoading]);
+  }, []);
 
   return { userToken, isLoading };
 };

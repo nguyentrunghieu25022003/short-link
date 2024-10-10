@@ -101,7 +101,7 @@ module.exports.releaseAccessToken = async (req, res) => {
           path: "/"
         });
 
-        return res.status(200).json({ message: "Token is valid" });
+        return res.status(200).json({ message: "Token is valid", accessToken: newAccessToken });
       });
     }
   } catch (err) {
