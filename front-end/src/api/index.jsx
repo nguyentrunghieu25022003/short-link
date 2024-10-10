@@ -26,7 +26,7 @@ export const getUserLocation = async (ip) => {
 
 export const getAllShortenedLink = async () => {
   try {
-    const response = await axios.get(`${import.meta.env.VITE_API_URL}/all`);
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/all-url`);
     if (response.status === 200) {
       return response.data;
     }

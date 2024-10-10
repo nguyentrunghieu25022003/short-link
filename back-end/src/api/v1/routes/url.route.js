@@ -3,7 +3,7 @@ const router = express.Router();
 
 const controller = require("../controllers/url.controller");
 
-router.get("/all", controller.getAllShortenedLink);
+router.get("/all-url", controller.getAllShortenedLink);
 router.post("/shorten/:userId", controller.createShortenedLink);
 router.get("/ip", controller.handleGetIPAddress);
 router.get("/track-location/:shortId", controller.handleSaveIPAddressAndLocation);

@@ -34,6 +34,7 @@ function App() {
           {privateRoutes.map((route, index) => {
             const Page = route.component;
             const Layout = route.layout || Fragment;
+            console.log(userToken)
             return (
               <Route
                 key={index}

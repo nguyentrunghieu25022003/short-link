@@ -73,14 +73,13 @@ module.exports.handleCheckToken = async (req, res) => {
       return res.status(403).json({ message: "Refresh token is required" });
     }
 
-    if(!accessToken) {
+    if (!accessToken) {
       jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, (err, decodedRefresh) => {
         if (err) {
           return res.status(403).json({ message: "Invalid refresh token, please log in again." });
         }
-  
+
         const newAccessToken = createAccessToken(decodedRefresh.id);
-  
         res.cookie("accessToken", newAccessToken, {
           httpOnly: true,
           expires: new Date(Date.now() + 15 * 60 * 1000),
@@ -91,11 +90,14 @@ module.exports.handleCheckToken = async (req, res) => {
 
         return res.status(200).json({ message: "Token is valid", accessToken: newAccessToken });
       });
+    } else {
+      return res.status(200).json({ message: "Token is valid" });
     }
   } catch (err) {
     res.status(500).send("Message: " + err.message);
   }
 };
+
 
 module.exports.handleLogOut = async (req, res) => {
   try {

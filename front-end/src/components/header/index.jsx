@@ -5,7 +5,7 @@ import "./header.css";
 const Header = () => {
   const user = localStorage.getItem("user-short-link");
   const accessToken = localStorage.getItem("accessToken");
-  
+  console.log(user)
   const submitLogOutRequest = async () => {
     try {
       const response = await handleLogOut(accessToken);
@@ -65,14 +65,14 @@ const Header = () => {
                         Home
                       </Link>
                     </li>
-                    {user && <li className="nav-item">
+                    <li className="nav-item">
                       <Link
                         to="/histories"
                         className="nav-link fs-3 text-light fw-medium"
                       >
                         History
                       </Link>
-                    </li>}
+                    </li>
                   </ul>
                   <ul className="navbar-nav ms-auto navbar-custom">
                     {user ? (

@@ -56,10 +56,16 @@ module.exports.handleSaveIPAddressAndLocation = async (req, res) => {
     const { shortId } = req.params;
     const ip = getClientIP(req);
     const base64Location = req.query.data;
+    
+    if (!base64Location) {
+      return res.status(400).send("Location data is required.");
+    }
+
     const decodedLocation = atob(base64Location);
     const locationData = JSON.parse(decodedLocation);
     const url = await Url.findOne({ shortId: shortId });
-    if(!url) {
+
+    if(url) {
       url.visits.push({
         ip: ip,
         location: locationData
@@ -121,12 +127,29 @@ module.exports.handleRedirectShortenedLink = async (req, res) => {
       const userIP = getClientIP(req);
       const locationResponse = await axios.get(`https://get.geojs.io/v1/ip/geo/${userIP}.json`);
       const locationData = locationResponse?.data;
-      urlData.visits.push({
-        ip: userIP,
-        location: locationData,
-        timestamp: new Date()
-      });
-      await urlData.save();
+      const hasVisited = urlData.visits.some(visit => visit.ip === userIP);
+      const timeLimit = 5 * 60 * 1000;
+
+      if (!hasVisited) {
+        urlData.visits.push({
+          ip: userIP,
+          location: locationData,
+          timestamp: new Date()
+        });
+        await urlData.save();
+      } else {
+        const lastVisit = urlData.visits.find(visit => visit.ip === userIP);
+        const timeSinceLastVisit = new Date() - new Date(lastVisit.timestamp);
+
+        if (timeSinceLastVisit > timeLimit) {
+          urlData.visits.push({
+            ip: userIP,
+            location: locationData,
+            timestamp: new Date()
+          });
+          await urlData.save();
+        }
+      }
       res.redirect(urlData.originalUrl);
     }
   } catch (err) {

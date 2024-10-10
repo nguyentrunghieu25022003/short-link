@@ -12,7 +12,6 @@ const Histories = () => {
       setIsLoading(true);
       try {
         const response = await getUserHistories(userId);
-        console.log(response)
         setShortenedLinks(response);
       } catch (err) {
         console.log("Error: " + err.message);
