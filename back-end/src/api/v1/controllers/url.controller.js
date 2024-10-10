@@ -59,11 +59,13 @@ module.exports.handleSaveIPAddressAndLocation = async (req, res) => {
     const decodedLocation = atob(base64Location);
     const locationData = JSON.parse(decodedLocation);
     const url = await Url.findOne({ shortId: shortId });
-    url.visits.push({
-      ip: ip,
-      location: locationData
-    });
-    await url.save();
+    if(!url) {
+      url.visits.push({
+        ip: ip,
+        location: locationData
+      });
+      await url.save();
+    }
 
     res.setHeader("Content-Type", "image/png");
     res.status(200).send(Buffer.from([]));
