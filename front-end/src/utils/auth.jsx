@@ -8,9 +8,15 @@ const useAuthToken = () => {
   useEffect(() => {
     const checkAuthToken = async () => {
       try {
+        const accessToken = localStorage.getItem("accessToken");
         const response = await axios.get(
           `${import.meta.env.VITE_API_URL}/api/auth/check-token`,
-          { withCredentials: true }
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+            withCredentials: true
+          }
         );
 
         if (response.status === 200 && response.data.token) {
@@ -24,9 +30,15 @@ const useAuthToken = () => {
         console.log("Access token expired, attempting refresh", error);
 
         try {
+          const accessToken = localStorage.getItem("accessToken");
           const refreshTokenResponse = await axios.get(
             `${import.meta.env.VITE_API_URL}/api/auth/refresh-token`,
-            { withCredentials: true }
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+              withCredentials: true
+            }
           );
 
           if (refreshTokenResponse.status === 200 && refreshTokenResponse.data.token) {

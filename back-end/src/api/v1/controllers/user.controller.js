@@ -50,7 +50,13 @@ module.exports.handleSignIn = async (req, res) => {
       sameSite: "None",
       path: "/"
     });
-    res.status(200).send({ message: "Login successful", user: { id: user.id, email: user.email }, });
+    
+    res.status(200).send({
+      message: "Login successful",
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+      user: { id: user.id, email: user.email },
+    });
   } catch (err) {
     res.status(500).send("Error login: " + err.message);
   }

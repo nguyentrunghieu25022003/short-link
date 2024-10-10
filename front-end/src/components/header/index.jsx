@@ -10,6 +10,8 @@ const Header = () => {
       const response = await handleLogOut();
       if(response) {
         localStorage.removeItem("user-short-link");
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
         console.log("Logged out successfully !");
         setTimeout(() => {
           window.location.reload();
