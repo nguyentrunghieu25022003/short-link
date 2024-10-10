@@ -58,7 +58,7 @@ module.exports.handleSignIn = async (req, res) => {
 
 module.exports.handleCheckToken = async (req, res) => {
   try {
-    if (req.cookies === undefined || req.cookies.refreshToken === undefined) {
+    if (!req.cookies || !req.cookies.refreshToken) {
       return res.status(403).send({ message: "Refresh token is required" });
     }
     res.status(200).send({ message: "Token is valid" });
