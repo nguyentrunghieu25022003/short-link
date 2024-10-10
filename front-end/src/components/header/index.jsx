@@ -5,7 +5,6 @@ import "./header.css";
 
 const Header = () => {
   const { userToken } = useAuthToken();
-  const user = localStorage.getItem("user-short-link");
   
   const submitLogOutRequest = async () => {
     try {

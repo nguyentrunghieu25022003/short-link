@@ -19,6 +19,8 @@ const useAuthToken = () => {
           setUserToken(true);
           setIsLoading(false);
         } else {
+          setUserToken(false);
+          setIsLoading(false);
           throw new Error("Token validation failed");
         }
       } catch (error) {
