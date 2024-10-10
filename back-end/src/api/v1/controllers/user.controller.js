@@ -65,18 +65,6 @@ module.exports.handleSignIn = async (req, res) => {
 module.exports.handleCheckToken = async (req, res) => {
   try {
     const accessToken = req.cookies.accessToken;
-    if (!accessToken) {
-      return res.status(401).json({ message: "Token is required" });
-    }
-    res.json({ message: "Success", token: req.cookies });
-  } catch (err) {
-    res.status(500).send("Message: " + err.message);
-  }
-};
-
-module.exports.releaseAccessToken = async (req, res) => {
-  try {
-    const accessToken = req.cookies.accessToken;
     const authHeader = req.headers["authorization"];
     const refreshToken = authHeader && authHeader.split(" ")[1] || req.cookies.refreshToken;
 
@@ -104,7 +92,7 @@ module.exports.releaseAccessToken = async (req, res) => {
       });
     }
   } catch (err) {
-    return res.status(500).json({ message: "Token not valid: " + err.message });
+    res.status(500).send("Message: " + err.message);
   }
 };
 
