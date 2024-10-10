@@ -11,7 +11,7 @@ const SignIn = () => {
       const response = await handleSignIn({ email: email, password: password });
       if (response) {
         localStorage.setItem("user-short-link", JSON.stringify(response.user));
-        localStorage.getItem("accessToken", response.accessToken);
+        localStorage.setItem("accessToken", response.accessToken);
         localStorage.setItem("refreshToken", response.refreshToken);
         setEmail("");
         setPassword("");

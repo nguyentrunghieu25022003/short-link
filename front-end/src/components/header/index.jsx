@@ -8,7 +8,6 @@ const Header = () => {
   
   const submitLogOutRequest = async () => {
     try {
-      console.log("accessToken: " + accessToken);
       const response = await handleLogOut(accessToken);
       if(response) {
         localStorage.removeItem("user-short-link");
