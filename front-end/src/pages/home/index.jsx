@@ -111,7 +111,7 @@ const Home = () => {
             </tr>
           </thead>
           <tbody>
-            {shortenedLinks.map((link, index) => (
+            {shortenedLinks?.map((link, index) => (
               <tr
                 key={index}
                 className="fs-4 fw-normal text-dark table-light align-middle"
@@ -119,7 +119,7 @@ const Home = () => {
                 <td>{index + 1}</td>
                 <td className="text-truncate" style={{ maxWidth: "150px" }}>
                   <a
-                    href={`${import.meta.env.VITE_API_URL}/api/url/shorten/${
+                    href={`${import.meta.env.VITE_API_URL}/${
                       link.shortId
                     }`}
                     target="_blank"
@@ -127,7 +127,7 @@ const Home = () => {
                     style={{ cursor: "pointer" }}
                     onClick={() => handleGetIPAddressAndLocation(link)}
                   >
-                    {import.meta.env.VITE_API_URL}/api/url/{link.shortId}
+                    {import.meta.env.VITE_API_URL}/{link.shortId}
                   </a>
                 </td>
                 <td className="text-truncate" style={{ maxWidth: "250px" }}>

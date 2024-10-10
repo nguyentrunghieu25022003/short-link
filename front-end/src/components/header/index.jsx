@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom";
-import useAuthToken from "../../utils/auth";
 import { handleLogOut } from "../../api/index";
 import "./header.css";
 
 const Header = () => {
-  const { userToken } = useAuthToken();
+  const user = localStorage.getItem("user-short-link");
   
   const submitLogOutRequest = async () => {
     try {
@@ -73,7 +72,7 @@ const Header = () => {
                     </li>
                   </ul>
                   <ul className="navbar-nav ms-auto navbar-custom">
-                    {userToken ? (
+                    {user ? (
                       <li className="nav-item">
                         <span
                           className="nav-link fs-3 text-light fw-medium log-out-item"

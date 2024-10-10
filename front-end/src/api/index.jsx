@@ -26,7 +26,7 @@ export const getUserLocation = async (ip) => {
 
 export const getAllShortenedLink = async () => {
   try {
-    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/url`);
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/all`);
     if (response.status === 200) {
       return response.data;
     }
@@ -90,7 +90,9 @@ export const handleSignUp = async (formData) => {
 
 export const handleLogOut = async () => {
   try {
-    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/log-out`);
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/log-out`, {
+      withCredentials: true,
+    });
     if (response.status === 200) {
       return response.data;
     }

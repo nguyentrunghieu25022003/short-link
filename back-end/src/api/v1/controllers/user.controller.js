@@ -58,23 +58,54 @@ module.exports.handleSignIn = async (req, res) => {
 
 module.exports.handleCheckToken = async (req, res) => {
   try {
-    if (!req.cookies || !req.cookies.refreshToken) {
-      return res.status(403).send({ message: "Refresh token is required" });
+    const token = req.cookies.accessToken;
+    if (!token) {
+      return res.status(401).json({ message: "Token is required" });
     }
-    res.status(200).send({ message: "Token is valid" });
+    res.json({ message: "Success" });
   } catch (err) {
-    res.status(500).send("Token not valid: " + err.message);
+    res.status(500).send("Message: " + err.message);
+  }
+};
+
+module.exports.releaseAccessToken = async (req, res) => {
+  try {
+    const accessToken = req.cookies.accessToken;
+    const refreshToken = req.cookies.refreshToken;
+
+    if (!refreshToken) {
+      return res.status(403).json({ message: "Refresh token is required" });
+    }
+
+    if(!accessToken) {
+      jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, (err, decodedRefresh) => {
+        if (err) {
+          return res.status(403).json({ message: "Invalid refresh token, please log in again." });
+        }
+  
+        const newAccessToken = createAccessToken(decodedRefresh.id);
+  
+        res.cookie("accessToken", newAccessToken, {
+          httpOnly: true,
+          expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "None",
+          path: "/"
+        });
+
+        return res.status(200).json({ message: "Token is valid" });
+      });
+    }
+  } catch (err) {
+    return res.status(500).json({ message: "Token not valid: " + err.message });
   }
 };
 
 module.exports.handleLogOut = async (req, res) => {
   try {
-    res.clearCookie("accessToken", { path: "/", httpOnly: true, secure: true });
-    res.clearCookie("refreshToken", {
-      path: "/",
-      httpOnly: true,
-      secure: true,
-    });
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
+
     res.status(200).send({ message: "Logged out successful" });
   } catch (err) {
     res.status(500).send("Error logging out: " + err.message);

@@ -19,8 +19,14 @@ const useAuthToken = () => {
           setUserToken(true);
           setIsLoading(false);
         } else {
+          const refreshToken = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/refresh-token`);
+          if(refreshToken.status === 200) {
+            console.log("Refresh token successfully");
+            setUserToken(true);
+            setIsLoading(false);
+          }
           setUserToken(false);
-          setIsLoading(false);
+          setIsLoading(true);
           throw new Error("Token validation failed");
         }
       } catch (error) {
