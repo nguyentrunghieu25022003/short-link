@@ -98,7 +98,6 @@ module.exports.handleCheckToken = async (req, res) => {
   }
 };
 
-
 module.exports.handleLogOut = async (req, res) => {
   try {
     res.clearCookie("accessToken", {

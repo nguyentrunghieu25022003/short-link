@@ -62,7 +62,6 @@ const Home = () => {
       try {
         const response = await getAllShortenedLink();
         setShortenedLinks(response);
-        console.log("Response: " + response)
       } catch (err) {
         console.log("Error fetching: " + err.message);
       } finally {
