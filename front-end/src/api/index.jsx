@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const getUserIP = async () => {
   try {
-    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/url/ip`);
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/ip`);
     if(response.status === 200) {
       return response.data.ip;
     }
@@ -38,7 +38,7 @@ export const getAllShortenedLink = async () => {
 
 export const getUserHistories = async (userId) => {
   try {
-    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/url/${userId}/histories`);
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/${userId}/histories`);
     if (response.status === 200) {
       return response.data;
     }
@@ -50,7 +50,7 @@ export const getUserHistories = async (userId) => {
 
 export const createShortenedLink = async (formData, userId) => {
   try {
-    const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/url/shorten/${userId}`,
+    const response = await axios.post(`${import.meta.env.VITE_API_URL}/shorten/${userId}`,
       formData
     );
     if (response.status === 200) {
