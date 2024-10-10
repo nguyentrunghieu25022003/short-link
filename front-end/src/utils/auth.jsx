@@ -30,12 +30,12 @@ const useAuthToken = () => {
         console.log("Access token expired, attempting refresh", error);
 
         try {
-          const accessToken = localStorage.getItem("accessToken");
+          const refreshToken = localStorage.getItem("refreshToken");
           const refreshTokenResponse = await axios.get(
             `${import.meta.env.VITE_API_URL}/api/auth/refresh-token`,
             {
               headers: {
-                Authorization: `Bearer ${accessToken}`,
+                Authorization: `Bearer ${refreshToken}`,
               },
               withCredentials: true
             }

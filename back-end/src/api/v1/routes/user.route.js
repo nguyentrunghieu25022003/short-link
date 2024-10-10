@@ -2,12 +2,12 @@ const express = require("express");
 const router = express.Router();
 
 const controller = require("../controllers/user.controller");
-const authenticate = require("../../../middlewares/authenticate");
+const authenticateToken = require("../../../middlewares/authenticate");
 
 router.post("/sign-up", controller.handleSignUp);
 router.post("/sign-in", controller.handleSignIn);
 router.get("/check-token", controller.handleCheckToken);
-router.get("/refresh-token", authenticate, controller.releaseAccessToken);
-router.get("/log-out", authenticate, controller.handleLogOut);
+router.get("/refresh-token", authenticateToken, controller.releaseAccessToken);
+router.get("/log-out", authenticateToken, controller.handleLogOut);
 
 module.exports = router;

@@ -50,7 +50,7 @@ module.exports.handleSignIn = async (req, res) => {
       sameSite: "None",
       path: "/"
     });
-    
+
     res.status(200).send({
       message: "Login successful",
       accessToken: accessToken,
@@ -64,8 +64,9 @@ module.exports.handleSignIn = async (req, res) => {
 
 module.exports.handleCheckToken = async (req, res) => {
   try {
-    const token = req.cookies.accessToken;
-    if (!token) {
+    const authHeader = req.headers["authorization"];
+    const accessToken = authHeader && authHeader.split(" ")[1] || req.cookies.accessToken;
+    if (!accessToken) {
       return res.status(401).json({ message: "Token is required" });
     }
     res.json({ message: "Success", token: req.cookies });
@@ -77,7 +78,8 @@ module.exports.handleCheckToken = async (req, res) => {
 module.exports.releaseAccessToken = async (req, res) => {
   try {
     const accessToken = req.cookies.accessToken;
-    const refreshToken = req.cookies.refreshToken;
+    const authHeader = req.headers["authorization"];
+    const refreshToken = authHeader && authHeader.split(" ")[1] || req.cookies.refreshToken;
 
     if (!refreshToken) {
       return res.status(403).json({ message: "Refresh token is required" });

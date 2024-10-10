@@ -7,10 +7,7 @@ const authenticateToken = async (req, res, next) => {
   if (!accessToken) {
     return res.status(401).json({ message: "No access token provided." });
   }
-  if (!accessToken) {
-    return res.status(401).json({ message: "No access token provided." });
-  }
-
+  
   try {
     const decoded = jwt.verify(accessToken, process.env.JWT_ACCESS_SECRET);
     req.user = decoded;
