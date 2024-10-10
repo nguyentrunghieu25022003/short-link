@@ -10,29 +10,32 @@ const useAuthToken = () => {
       try {
         const response = await axios.get(
           `${import.meta.env.VITE_API_URL}/api/auth/check-token`,
-          {
-            withCredentials: true,
-          }
+          { withCredentials: true }
         );
+
         if (response.status === 200) {
-          console.log("Check token successfully", response.data.token);
+          console.log("Token is valid", response.data.token);
           setUserToken(true);
           setIsLoading(false);
-        } else {
-          const refreshToken = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/refresh-token`);
-          if(refreshToken.status === 200) {
-            console.log("Refresh token successfully");
+        }
+      } catch (error) {
+        console.log("Access token expired, attempting refresh", error);
+        try {
+          const refreshTokenResponse = await axios.get(
+            `${import.meta.env.VITE_API_URL}/api/auth/refresh-token`,
+            { withCredentials: true }
+          );
+
+          if (refreshTokenResponse.status === 200) {
+            console.log("Refresh token successful");
             setUserToken(true);
             setIsLoading(false);
           }
+        } catch (refreshError) {
+          console.log("Refresh token failed, logging out", refreshError);
           setUserToken(false);
-          setIsLoading(true);
-          throw new Error("Token validation failed");
+          setIsLoading(false);
         }
-      } catch (error) {
-        setUserToken(false);
-        setIsLoading(false);
-        console.error(error);
       }
     };
 

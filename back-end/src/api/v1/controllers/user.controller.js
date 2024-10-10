@@ -38,14 +38,14 @@ module.exports.handleSignIn = async (req, res) => {
     const refreshToken = createRefreshToken(user.id);
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
-      expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      expires: new Date(Date.now() + 15 * 60 * 1000),
       secure: process.env.NODE_ENV === "production",
       sameSite: "None",
       path: "/"
     });
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      expires: new Date(Date.now() + 12 * 30* 24 * 60 * 60 * 1000),
+      expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
       secure: process.env.NODE_ENV === "production",
       sameSite: "None",
       path: "/"
@@ -59,7 +59,7 @@ module.exports.handleSignIn = async (req, res) => {
 module.exports.handleCheckToken = async (req, res) => {
   try {
     const token = req.cookies.accessToken;
-    if (token === undefined || token === null) {
+    if (!token) {
       return res.status(401).json({ message: "Token is required" });
     }
     res.json({ message: "Success", token: token });
@@ -73,11 +73,11 @@ module.exports.releaseAccessToken = async (req, res) => {
     const accessToken = req.cookies.accessToken;
     const refreshToken = req.cookies.refreshToken;
 
-    if (refreshToken === undefined || refreshToken === null) {
+    if (!refreshToken) {
       return res.status(403).json({ message: "Refresh token is required" });
     }
 
-    if(accessToken === undefined || accessToken === null) {
+    if(!accessToken) {
       jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, (err, decodedRefresh) => {
         if (err) {
           return res.status(403).json({ message: "Invalid refresh token, please log in again." });
@@ -87,7 +87,7 @@ module.exports.releaseAccessToken = async (req, res) => {
   
         res.cookie("accessToken", newAccessToken, {
           httpOnly: true,
-          expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+          expires: new Date(Date.now() + 15 * 60 * 1000),
           secure: process.env.NODE_ENV === "production",
           sameSite: "None",
           path: "/"
@@ -103,9 +103,19 @@ module.exports.releaseAccessToken = async (req, res) => {
 
 module.exports.handleLogOut = async (req, res) => {
   try {
-    res.clearCookie("accessToken");
-    res.clearCookie("refreshToken");
+    res.clearCookie("accessToken", {
+      path: "/",
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "None",
+    });
 
+    res.clearCookie("refreshToken", {
+      path: "/",
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "None",
+    });
     res.status(200).send({ message: "Logged out successful" });
   } catch (err) {
     res.status(500).send("Error logging out: " + err.message);

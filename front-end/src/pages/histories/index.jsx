@@ -50,14 +50,14 @@ const Histories = () => {
                   <td>{index + 1}</td>
                   <td className="text-truncate" style={{ maxWidth: "150px" }}>
                     <a
-                      href={`${import.meta.env.VITE_API_URL}/api/url/shorten/${
+                      href={`${import.meta.env.VITE_API_URL}/${
                         link.shortId
                       }`}
                       target="_blank"
                       className="link-primary"
                       style={{ cursor: "pointer" }}
                     >
-                      {import.meta.env.VITE_API_URL}/api/url/{link.shortId}
+                      {import.meta.env.VITE_API_URL}/{link.shortId}
                     </a>
                   </td>
                   <td className="text-truncate" style={{ maxWidth: "250px" }}>
