@@ -4,10 +4,11 @@ import "./header.css";
 
 const Header = () => {
   const user = localStorage.getItem("user-short-link");
+  const accessToken = localStorage.getItem("accessToken");
   
   const submitLogOutRequest = async () => {
     try {
-      const accessToken = localStorage.getItem("accessToken");
+      console.log("accessToken: " + accessToken);
       const response = await handleLogOut(accessToken);
       if(response) {
         localStorage.removeItem("user-short-link");
