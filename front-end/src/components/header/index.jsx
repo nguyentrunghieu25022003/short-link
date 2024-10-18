@@ -18,9 +18,9 @@ const Header = () => {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
       }
-      setTimeout(() => {
+      /* setTimeout(() => {
         window.location.reload();
-      }, 3000);
+      }, 3000); */
     } catch (err) {
       console.log("Error: " + err.message);
     }
