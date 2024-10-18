@@ -1,5 +1,5 @@
 import "./header.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { handleLogOut } from "../../api/index";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
@@ -8,17 +8,17 @@ import LogoutIcon from "@mui/icons-material/Logout";
 const Header = () => {
   const user = localStorage.getItem("user-short-link");
   const accessToken = localStorage.getItem("accessToken");
+  const navigate = useNavigate();
   const submitLogOutRequest = async () => {
     try {
       const response = await handleLogOut(accessToken);
       if (response) {
+        sessionStorage.removeItem("lastPath");
         localStorage.removeItem("user-short-link");
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
         console.log("Logged out successfully !");
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
+        navigate("/sign-in");
       }
     } catch (err) {
       console.log("Error: " + err.message);
