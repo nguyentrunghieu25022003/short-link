@@ -36,9 +36,25 @@ export const getAllShortenedLink = async () => {
   }
 };
 
+export const getAllResult = async () => {
+  try {
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/crawl/social-snapshot/all`, {
+      withCredentials: true,
+    });
+    if (response.status === 200) {
+      return response.data;
+    }
+    return null;
+  } catch (err) {
+    console.log("Error" + err.message);
+  }
+};
+
 export const getUserHistories = async (userId) => {
   try {
-    const response = await axios.get(`${import.meta.env.VITE_API_URL}/${userId}/histories`);
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/${userId}/histories`, {
+      withCredentials: true
+    });
     if (response.status === 200) {
       return response.data;
     }
@@ -51,6 +67,23 @@ export const getUserHistories = async (userId) => {
 export const createShortenedLink = async (formData, userId) => {
   try {
     const response = await axios.post(`${import.meta.env.VITE_API_URL}/shorten/${userId}`,
+      formData,
+      {
+        withCredentials: true
+      }
+    );
+    if (response.status === 200) {
+      return response.data;
+    }
+    return null;
+  } catch (err) {
+    console.log("Error" + err.message);
+  }
+};
+
+export const deleteShortenedLink = async (formData) => {
+  try {
+    const response = await axios.delete(`${import.meta.env.VITE_API_URL}/shorten/delete`,
       formData
     );
     if (response.status === 200) {

@@ -23,21 +23,20 @@ const Histories = () => {
 
   if (isLoading) {
     return <Loading />;
-  }
+  };
 
   return (
     <div className="container">
       <div className="row">
-        <h3 className="fs-1 fw-bold pt-5 pb-5">Histories</h3>
-        <div className="table-responsive">
+        <div className="table-responsive mt-5 mb-5">
           <table className="table table-hover table-bordered">
             <thead>
-              <tr className="fs-3 fw-medium text-dark table-primary">
+              <tr className="fs-3 fw-medium table-dark">
                 <th className="text-light">#</th>
-                <th className="text-light">Shortened Link</th>
-                <th className="text-light">Original Link</th>
-                <th className="text-light">Created At</th>
-                <th className="text-light">IP and Location</th>
+                <th className="text-light">Shortened URL</th>
+                <th className="text-light">Original URL</th>
+                <th className="text-light">Created at</th>
+                <th className="text-light">IP Address - Location</th>
               </tr>
             </thead>
             <tbody>
@@ -47,7 +46,7 @@ const Histories = () => {
                   className="fs-4 fw-normal text-dark table-light align-middle"
                 >
                   <td>{index + 1}</td>
-                  <td className="text-truncate" style={{ maxWidth: "150px" }}>
+                  <td className="text-truncate" style={{ maxWidth: "250px" }}>
                     <a
                       href={`${import.meta.env.VITE_API_URL}/${
                         link.shortId
@@ -73,7 +72,7 @@ const Histories = () => {
                     <ul style={{ maxHeight: "100px", overflowY: "auto" }}>
                       {link.visits.map((item, idx) => (
                         <li key={idx} className="pt-2 pb-2">
-                          {idx + 1}{")"} <strong className="fw-bold">{item?.ip}</strong> - {item?.location?.region}, {" "} {item?.location?.country} - {new Date(item.timestamp).toLocaleString()}
+                          {idx + 1}{")"} <strong className="fw-bold">{item?.ip}</strong> - {item?.location?.region ? item?.location?.region + "," : ""} {" "} {item?.location?.country ? item?.location?.country + " -" : ""} {new Date(item.timestamp).toLocaleString()}
                         </li>
                       ))}
                     </ul>

@@ -12,6 +12,12 @@ const SignUp = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+      const accept = document.querySelector("input[name='accept']:checked");
+      if(!accept) {
+        alert("Please accept our terms before registering for an account.");
+        return;
+      }
+
       const response = await handleSignUp({
         firstName: firstName,
         lastName: lastName,
@@ -84,6 +90,7 @@ const SignUp = () => {
               required
             />
           </div>
+          <p className="d-flex align-items-center gap-2 mt-4 fs-5"><input type="checkbox" name="accept" /><span>I hereby certify that all provided information is valid, and I agree to the terms and conditions of the application.</span></p>
           <button type="submit" className="btn btn-primary fs-3 fw-medium w-100 mt-5">Sign Up</button>
         </form>
       </div>

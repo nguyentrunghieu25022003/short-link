@@ -8,6 +8,11 @@ const mongodb = require("../config/index");
 const path = require("path");
 const routes = require("./api/v1/routes/index.route");
 const corsHelper = require("./helper/cors");
+const config = require("../config.json");
+
+/* process.env.HTTP_PROXY = config.proxy.http;
+process.env.HTTPS_PROXY = config.proxy.https;
+process.env.NO_PROXY = config.proxy.no_proxy; */
 
 const app = express();
 const port = 3001;

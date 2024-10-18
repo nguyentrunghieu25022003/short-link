@@ -2,13 +2,20 @@ import { Fragment } from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import { publicRoutes, privateRoutes } from "./routes/index";
 import useAuthToken from "./utils/auth";
+import Loading from "./components/loading/index";
+import HandleReloading from "./utils/navigation";
 
 function App() {
-  const { userToken } = useAuthToken();
+  const { userToken, isLoading } = useAuthToken();
+
+  if(isLoading) {
+    return <Loading />;
+  };
 
   return (
     <Router>
       <div className="App">
+        <HandleReloading />
         <Routes>
           {publicRoutes.map((route, index) => {
             const Page = route.component;
@@ -34,7 +41,6 @@ function App() {
           {privateRoutes.map((route, index) => {
             const Page = route.component;
             const Layout = route.layout || Fragment;
-            console.log(userToken)
             return (
               <Route
                 key={index}

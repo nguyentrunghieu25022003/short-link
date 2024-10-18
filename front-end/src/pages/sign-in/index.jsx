@@ -4,22 +4,31 @@ import { handleSignIn } from "../../api/index";
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isValid, setIsValid] = useState(true);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       const response = await handleSignIn({ email: email, password: password });
+      
       if (response) {
-        localStorage.setItem("user-short-link", JSON.stringify(response.user));
-        localStorage.setItem("accessToken", response.accessToken);
-        localStorage.setItem("refreshToken", response.refreshToken);
+        const { user, accessToken, refreshToken } = response;
+
+        localStorage.setItem("user-short-link", JSON.stringify(user));
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
+    
         setEmail("");
         setPassword("");
+    
         setTimeout(() => {
           window.location.href = "/";
         }, 3000);
+      } else {
+        setIsValid(false);
       }
     } catch (err) {
+      setIsValid(false);
       console.log("Error: " + err.message);
     }
   };
@@ -53,7 +62,8 @@ const SignIn = () => {
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary fs-3 fw-medium w-100 mt-3">Sign In</button>
+          {!isValid && <strong className="d-block mt-2 fs-5 text-danger fw-medium">Invalid login information, please check and try again.</strong>}
+          <button type="submit" className="btn btn-primary fs-3 fw-medium w-100 mt-5">Sign In</button>
         </form>
       </div>
     </div>

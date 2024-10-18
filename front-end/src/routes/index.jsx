@@ -3,6 +3,7 @@ import SignIn from "../pages/sign-in/index";
 import SignUp from "../pages/sign-up/index";
 import Home from "../pages/home/index";
 import Histories from "../pages/histories/index";
+import SocialSnapshot from "../pages/social-snapshot/index";
 
 const publicRoutes = [
     { path: "/", component: Home, layout: DefaultLayout },
@@ -11,7 +12,8 @@ const publicRoutes = [
 ]
 
 const privateRoutes = [
-    { path: "/histories", component: Histories, layout: DefaultLayout }
+    { path: "/histories", component: Histories, layout: DefaultLayout },
+    { path: "/social-snapshot", component: SocialSnapshot, layout: DefaultLayout }
 ];
 
 export { publicRoutes, privateRoutes };

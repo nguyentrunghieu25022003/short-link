@@ -1,6 +1,9 @@
+import "./header.css";
 import { Link } from "react-router-dom";
 import { handleLogOut } from "../../api/index";
-import "./header.css";
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 const Header = () => {
   const user = localStorage.getItem("user-short-link");
@@ -8,14 +11,14 @@ const Header = () => {
   const submitLogOutRequest = async () => {
     try {
       const response = await handleLogOut(accessToken);
-      if(response) {
+      if (response) {
         localStorage.removeItem("user-short-link");
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
         console.log("Logged out successfully !");
         setTimeout(() => {
           window.location.reload();
-        }, 3000);
+        }, 2000);
       }
     } catch (err) {
       console.log("Error: " + err.message);
@@ -23,22 +26,22 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-primary pt-3 pb-3">
+    <header className="bg-primary pt-3 pb-3 fixed-top">
       <div className="container">
         <div className="row">
           <nav className="navbar navbar-expand-lg navbar-light">
             <div className="container-fluid">
               <Link to="/" className="navbar-brand fs-1 fw-medium text-light">
-                Short Link
+                Short URL
               </Link>
               <button
-                className="navbar-toggler"
+                className="menu-toggle"
                 type="button"
                 data-bs-toggle="offcanvas"
                 data-bs-target="#offcanvasNavbar"
                 aria-controls="offcanvasNavbar"
               >
-                <span className="navbar-toggler-icon"></span>
+                <MenuIcon className="icon" />
               </button>
               <div
                 className="offcanvas offcanvas-end custom-canvas"
@@ -47,29 +50,55 @@ const Header = () => {
                 aria-labelledby="offcanvasNavbarLabel"
               >
                 <div className="offcanvas-header bg-primary">
-                  <h5 className="offcanvas-title fs-1 fw-medium text-light" id="offcanvasNavbarLabel">
-                    Menu
+                  <h5
+                    className="offcanvas-title fs-1 fw-medium text-light"
+                    id="offcanvasNavbarLabel"
+                  >
+                    Short URL
                   </h5>
                   <button
                     type="button"
-                    className="btn-close text-light text-reset"
+                    className="close text-light text-reset"
                     data-bs-dismiss="offcanvas"
-                    aria-label="Close"
-                  ></button>
+                  >
+                    <CloseIcon className="icon" />
+                  </button>
                 </div>
                 <div className="offcanvas-body bg-primary">
                   <ul className="navbar-nav me-auto mb-2 mb-lg-0 custom-item">
-                    <li className="nav-item">
-                      <Link to="/" className="nav-link fs-3 text-light fw-medium">
-                        Home
-                      </Link>
+                    <li className="nav-item dropdown">
+                      <a
+                        className="nav-link dropdown-toggle fs-3 text-light fw-medium"
+                        href="#"
+                        id="navbarDropdown"
+                        role="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        Tools
+                      </a>
+                      <ul
+                        className="dropdown-menu"
+                        aria-labelledby="navbarDropdown"
+                      >
+                        <li>
+                          <Link to="/" className="dropdown-item nav-link fs-4 fw-medium">
+                            Short URL
+                          </Link>
+                        </li>
+                        <li>
+                          <Link to="/social-snapshot" className="dropdown-item nav-link fs-4 fw-medium">
+                            Social Network
+                          </Link>
+                        </li>
+                      </ul>
                     </li>
                     <li className="nav-item">
                       <Link
                         to="/histories"
                         className="nav-link fs-3 text-light fw-medium"
                       >
-                        History
+                        Activity
                       </Link>
                     </li>
                   </ul>
@@ -81,6 +110,7 @@ const Header = () => {
                           onClick={() => submitLogOutRequest()}
                         >
                           Log out
+                          <LogoutIcon className="fs-2" />
                         </span>
                       </li>
                     ) : (

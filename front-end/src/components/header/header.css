@@ -1,3 +1,21 @@
+button {
+    border: none;
+    outline: none;
+    background-color: transparent;
+}
+
+.navbar-nav {
+    display: flex;
+    align-items: center;
+}
+
+
+.offcanvas-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 .custom-canvas {
     max-width: 250px;
 }
@@ -8,16 +26,71 @@
     gap: 20px;
 }
 
+.log-out-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
 .log-out-item:hover {
     cursor: pointer;
     text-decoration: underline;
 }
 
 .table-heading {
-    color: #ffffff;
+    color: var(--white-color);
 }
 
 .navbar-custom {
     min-width: 200px;
     padding-left: 20px;
+}
+
+.menu-toggle .icon, .close .icon {
+    font-size: 2.5rem;
+    color: var(--white-color);
+}
+
+.menu-toggle {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    .custom-item {
+        display: block;
+    }
+
+    .nav-item {
+        padding: 3px 0;
+    }
+
+    .navbar-custom {
+        display: flex;
+        flex-direction: row;
+        padding-left: 0;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+}
+  
+@media (max-width: 600px) {
+    .custom-item {
+        display: block;
+    }
+
+    .nav-item {
+        padding: 3px 0;
+    }
+
+    .navbar-custom {
+        display: flex;
+        flex-direction: row;
+        padding-left: 0;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
 }

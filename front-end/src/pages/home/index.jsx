@@ -50,7 +50,6 @@ const Home = () => {
       const img = new Image();
       img.src = imageUrl;
       document.body.appendChild(img);
-      console.log("Get IP address and location successfully !");
     } catch (err) {
       console.log("Error: " + err.message);
     }
@@ -77,13 +76,10 @@ const Home = () => {
   return (
     <div className="container mt-5">
       <form onSubmit={handleCreateShortenedLink} className="mb-5">
-        <label htmlFor="inputUrl" className="form-label fs-4">
-          Enter the URL to shorten:
-        </label>
-        <div className="mt-3 d-flex align-items-center gap-3">
+        <div className="mt-3 d-flex align-items-center justify-content-center gap-3">
           <input
             type="text"
-            className="form-control fs-4 w-100"
+            className="form-control fs-4 w-50"
             id="inputUrl"
             name="inputUrl"
             value={inputUrl}
@@ -103,11 +99,11 @@ const Home = () => {
       <div className="table-responsive">
         <table className="table table-hover table-bordered">
           <thead>
-            <tr className="fs-3 fw-medium table-primary">
+            <tr className="fs-3 fw-medium table-dark">
               <th className="text-light">#</th>
-              <th className="text-light">Shortened Link</th>
-              <th className="text-light">Original Link</th>
-              <th className="text-light">Created At</th>
+              <th className="text-light">Shortened URL</th>
+              <th className="text-light">Original URL</th>
+              <th className="text-light">Created at</th>
             </tr>
           </thead>
           <tbody>
