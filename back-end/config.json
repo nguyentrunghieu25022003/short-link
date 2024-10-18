@@ -1,7 +1,7 @@
 {
     "proxy": {
-        "http": "http://proxy-server:port",
-        "https": "http://proxy-server:port",
+        "http": "http://spmbnsdz-VN-rotate:8k09fneumfxk:p.webshare.io:80",
+        "https": "http://spmbnsdz-VN-rotate:8k09fneumfxk:p.webshare.io:80",
         "no_proxy": "localhost,127.0.0.1"
     }
 }
