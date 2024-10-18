@@ -69,10 +69,6 @@ const Home = () => {
     })();
   }, [userId, isRefreshing]);
 
-  useEffect(() => {
-    window.location.reload();
-  }, []);
-
   if (isLoading) {
     return <Loading />;
   };
