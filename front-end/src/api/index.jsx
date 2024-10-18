@@ -121,14 +121,10 @@ export const handleSignUp = async (formData) => {
   }
 };
 
-export const handleLogOut = async (accessToken) => {
+export const handleLogOut = async (userId, refreshToken) => {
   try {
-    console.log(accessToken)
-    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/log-out`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-      withCredentials: true
+    const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/${userId}/log-out`, {
+      refreshToken: refreshToken,
     });
     if (response.status === 200) {
       return response.data;

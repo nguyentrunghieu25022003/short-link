@@ -7,11 +7,12 @@ import LogoutIcon from "@mui/icons-material/Logout";
 
 const Header = () => {
   const user = localStorage.getItem("user-short-link");
-  const accessToken = localStorage.getItem("accessToken");
+  const refreshToken = localStorage.getItem("refreshToken");
   
   const submitLogOutRequest = async () => {
     try {
-      const response = await handleLogOut(accessToken);
+      const userId = JSON.parse(user).id;
+      const response = await handleLogOut(userId, refreshToken);
       if (response) {
         localStorage.removeItem("user-short-link");
         localStorage.removeItem("accessToken");

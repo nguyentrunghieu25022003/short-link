@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const User = require("../../../models/user.model");
+const BlackList = require("../../../models/black-list.model");
 const { createAccessToken, createRefreshToken } = require("../../../middlewares/jwt");
 
 module.exports.handleSignUp = async (req, res) => {
@@ -46,12 +47,11 @@ module.exports.handleSignIn = async (req, res) => {
     });
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
       secure: process.env.NODE_ENV === "production",
       sameSite: "None",
-      path: "/"
+      path: "/",
     });
-
     res.status(200).send({
       message: "Login successful",
       accessToken: accessToken,
@@ -67,10 +67,17 @@ module.exports.handleCheckToken = async (req, res) => {
   try {
     const accessToken = req.cookies.accessToken;
     const authHeader = req.headers["authorization"];
-    const refreshToken = authHeader && authHeader.split(" ")[1] || req.cookies.refreshToken;
+    const refreshToken = authHeader && authHeader.split(" ")[1];
+    const tokenInBlacklist = await BlackList.findOne({ refreshToken });
 
-    if (!refreshToken) {
-      return res.status(403).json({ message: "Refresh token is required" });
+    if (tokenInBlacklist) {
+      res.clearCookie("accessToken", {
+        path: "/",
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "None",
+      });
+      return res.status(403).json({ message: "Refresh token is invalid or expired, please log in again." });
     }
 
     if (!accessToken) {
@@ -100,19 +107,18 @@ module.exports.handleCheckToken = async (req, res) => {
 
 module.exports.handleLogOut = async (req, res) => {
   try {
-    res.clearCookie("accessToken", {
-      path: "/",
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "None",
-    });
+    const { userId } = req.params;
+    const { refreshToken } = req.body;
 
-    res.clearCookie("refreshToken", {
-      path: "/",
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "None",
+    if (!refreshToken) {
+      return res.status(400).json({ message: "Refresh token is required" });
+    }
+
+    const blackListedToken = new BlackList({
+      userId: userId,
+      refreshToken: refreshToken,
     });
+    await blackListedToken.save();
     res.status(200).send({ message: "Logged out successful" });
   } catch (err) {
     res.status(500).send("Error logging out: " + err.message);

@@ -7,7 +7,7 @@ const createAccessToken = (userId) => {
 
 const createRefreshToken = (userId) => {
   const refreshTokenSecret = process.env.JWT_REFRESH_SECRET || "refresh_fallback_secret";
-  return jwt.sign({ userId }, refreshTokenSecret, { expiresIn: "30d" });
+  return jwt.sign({ userId }, refreshTokenSecret, { expiresIn: "7d" });
 };
 
 module.exports = { createAccessToken, createRefreshToken };
