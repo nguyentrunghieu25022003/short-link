@@ -71,6 +71,12 @@ module.exports.handleCheckToken = async (req, res) => {
     const tokenInBlacklist = await BlackList.findOne({ refreshToken });
 
     if (tokenInBlacklist) {
+      res.clearCookie("refreshToken", {
+        path: "/",
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "None",
+      });
       res.clearCookie("accessToken", {
         path: "/",
         httpOnly: true,
