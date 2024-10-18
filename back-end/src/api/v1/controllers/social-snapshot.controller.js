@@ -17,6 +17,9 @@ module.exports.handleCrawlDataByUsername = async (req, res) => {
     const { userInput } = req.body;
     browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
+    await page.setUserAgent(
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+    );
     const url = `${process.env.FACEBOOK_URL}/login/identify/?ctx=recover&from_login_screen=0`;
     await page.goto(url, {
       waitUntil: "networkidle2",
@@ -83,6 +86,9 @@ module.exports.handleCrawlDataByUserId = async (req, res) => {
     const { userInput } = req.body;
     browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
+    await page.setUserAgent(
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+    );
     const url = `${process.env.FACEBOOK_URL}/login`;
     await page.goto(url, {
       waitUntil: "networkidle2",

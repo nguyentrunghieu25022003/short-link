@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const authenticateToken = async (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const accessToken = authHeader && authHeader.split(" ")[1] || req.cookies.accessToken;
-  console.log(accessToken)
+
   if (!accessToken) {
     return res.status(401).json({ message: "No access token provided." });
   }
