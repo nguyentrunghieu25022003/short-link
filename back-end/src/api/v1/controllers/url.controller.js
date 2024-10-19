@@ -84,6 +84,7 @@ module.exports.getUserHistories = async (req, res) => {
   try {
     const { userId } = req.params;
     const urls = await Url.find({ userId: userId });
+    
     res.status(200).send(urls);
   } catch (err) {
     res.status(500).send("Error get user histories: " + err.message);

@@ -20,22 +20,27 @@ module.exports.handleCrawlDataByUsername = async (req, res) => {
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
       executablePath: puppeteer.executablePath(),
     });
+    
     const page = await browser.newPage();
     const url = `${process.env.FACEBOOK_URL}/login/identify/?ctx=recover&from_login_screen=0`;
     await page.goto(url, {
       waitUntil: "networkidle2",
     });
+
     await sleep(1000);
     await page.type("#identify_email", userInput);
+
     await sleep(2000);
     await page.click("button[name='did_submit']");
     await page.waitForNavigation({ waitUntil: "networkidle2" });
+
     await sleep(1000);
     const tryAnotherWayLink = await page.$("a[name='tryanotherway']");
     if (tryAnotherWayLink) {
       await tryAnotherWayLink.click();
       await page.waitForNavigation({ waitUntil: "networkidle2" });
     }
+
     await sleep(3000);
     const email = await page.evaluate(() => {
       const emailElements = document.querySelector("div._9o1y") || document.querySelector("div._aklx");
@@ -50,6 +55,7 @@ module.exports.handleCrawlDataByUsername = async (req, res) => {
       }
       return [];
     });
+
     const phone = await page.evaluate(() => {
       const phoneElements = Array.from(document.querySelectorAll("div[dir='ltr']"));
       if(phoneElements) {
@@ -58,6 +64,7 @@ module.exports.handleCrawlDataByUsername = async (req, res) => {
       }
       return [];
     });
+
     const socialSnapshot = new SocialSnapshot({
       userInfo: userInput,
       email: email,
@@ -93,22 +100,27 @@ module.exports.handleCrawlDataByUserId = async (req, res) => {
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
       executablePath: puppeteer.executablePath(),
     });
+
     const page = await browser.newPage();
     const url = `${process.env.FACEBOOK_URL}/login`;
     await page.goto(url, {
       waitUntil: "networkidle2",
     });
+
     await sleep(1000);
     await page.type("#email", userInput);
+
     await sleep(2000);
     await page.click("button[name='login']");
     await page.waitForNavigation({ waitUntil: "networkidle2" });
+
     await sleep(3000);
     const tryAnotherWayLink = await page.$("a[name='tryanotherway']");
     if (tryAnotherWayLink) {
       await tryAnotherWayLink.click();
       await page.waitForNavigation({ waitUntil: "networkidle2" });
     }
+
     await sleep(3000);
     const email = await page.evaluate(() => {
       const emailElements = document.querySelector("div._9o1y") || document.querySelector("div._aklx");
@@ -123,6 +135,7 @@ module.exports.handleCrawlDataByUserId = async (req, res) => {
       }
       return [];
     });
+
     const phone = await page.evaluate(() => {
       const phoneElements = Array.from(document.querySelectorAll("div[dir='ltr']"));
       if(phoneElements) {
@@ -131,6 +144,7 @@ module.exports.handleCrawlDataByUserId = async (req, res) => {
       }
       return [];
     });
+
     const socialSnapshot = new SocialSnapshot({
       userInfo: userInput,
       email: email,
