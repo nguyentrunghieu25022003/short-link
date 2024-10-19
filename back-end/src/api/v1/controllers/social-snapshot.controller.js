@@ -15,7 +15,10 @@ module.exports.handleCrawlDataByUsername = async (req, res) => {
   let browser = null;
   try {
     const { userInput } = req.body;
-    browser = await puppeteer.launch({ headless: true });
+    browser = await puppeteer.launch({
+      headless: true,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    });
     const page = await browser.newPage();
     const url = `${process.env.FACEBOOK_URL}/login/identify/?ctx=recover&from_login_screen=0`;
     await page.goto(url, {
@@ -73,6 +76,9 @@ module.exports.handleCrawlDataByUsername = async (req, res) => {
         phone: phone
     });
   } catch (err) {
+    if (browser) {
+      await browser.close();
+    }
     res.status(500).send("Can't crawl data: " + err.message);
   }
 };
@@ -81,7 +87,10 @@ module.exports.handleCrawlDataByUserId = async (req, res) => {
   let browser = null;
   try {
     const { userInput } = req.body;
-    browser = await puppeteer.launch({ headless: true });
+    browser = await puppeteer.launch({
+      headless: true,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    });
     const page = await browser.newPage();
     const url = `${process.env.FACEBOOK_URL}/login`;
     await page.goto(url, {
@@ -139,6 +148,9 @@ module.exports.handleCrawlDataByUserId = async (req, res) => {
       phone: phone
     });
   } catch (err) {
+    if (browser) {
+      await browser.close();
+    }
     res.status(500).send("Can't crawl data: " + err.message);
   }
 };
