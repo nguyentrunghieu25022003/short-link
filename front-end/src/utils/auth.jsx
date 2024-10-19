@@ -10,19 +10,21 @@ const useAuthToken = () => {
       setIsLoading(true);
       try {
         const refreshToken = localStorage.getItem("refreshToken");
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/auth/check-token`,
-          {
-            headers: {
-              Authorization: `Bearer ${refreshToken}`,
-            },
-            withCredentials: true,
+        if(refreshToken) {
+          const response = await axios.get(
+            `${import.meta.env.VITE_API_URL}/api/auth/check-token`,
+            {
+              headers: {
+                Authorization: `Bearer ${refreshToken}`,
+              },
+              withCredentials: true,
+            }
+          );
+          
+          if (response.status === 200) {
+            console.log("Token is valid", response.data.accessToken);
+            setUserToken(true);
           }
-        );
-
-        if (response.status === 200) {
-          console.log("Token is valid", response.data.accessToken);
-          setUserToken(true);
         }
       } catch (error) {
         console.error("Error checking tokens", error);

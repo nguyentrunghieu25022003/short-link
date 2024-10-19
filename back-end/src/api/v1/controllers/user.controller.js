@@ -68,7 +68,7 @@ module.exports.handleCheckToken = async (req, res) => {
     const accessToken = req.cookies.accessToken;
     const authHeader = req.headers["authorization"];
     const refreshToken = authHeader && authHeader.split(" ")[1];
-    const tokenInBlacklist = await BlackList.findOne({ refreshToken });
+    const tokenInBlacklist = await BlackList.findOne({ refreshToken: refreshToken });
 
     if (tokenInBlacklist) {
       res.clearCookie("refreshToken", {
