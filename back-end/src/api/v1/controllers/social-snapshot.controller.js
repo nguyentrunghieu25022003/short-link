@@ -18,6 +18,7 @@ module.exports.handleCrawlDataByUsername = async (req, res) => {
     browser = await puppeteer.launch({
       headless: true,
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      executablePath: puppeteer.executablePath(),
     });
     const page = await browser.newPage();
     const url = `${process.env.FACEBOOK_URL}/login/identify/?ctx=recover&from_login_screen=0`;
@@ -90,6 +91,7 @@ module.exports.handleCrawlDataByUserId = async (req, res) => {
     browser = await puppeteer.launch({
       headless: true,
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      executablePath: puppeteer.executablePath(),
     });
     const page = await browser.newPage();
     const url = `${process.env.FACEBOOK_URL}/login`;
