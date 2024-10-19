@@ -17,10 +17,10 @@ module.exports.handleCrawlDataByUsername = async (req, res) => {
     const { userInput } = req.body;
     browser = await puppeteer.launch({
       headless: true,
+      executablePath: "C:/Users/ASUS/.cache/puppeteer/chrome/win64-130.0.6723.58/chrome-win64/chrome.exe",
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
-      executablePath: puppeteer.executablePath(),
     });
-    
+
     const page = await browser.newPage();
     const url = `${process.env.FACEBOOK_URL}/login/identify/?ctx=recover&from_login_screen=0`;
     await page.goto(url, {
@@ -97,8 +97,8 @@ module.exports.handleCrawlDataByUserId = async (req, res) => {
     const { userInput } = req.body;
     browser = await puppeteer.launch({
       headless: true,
+      executablePath: "C:/Users/ASUS/.cache/puppeteer/chrome/win64-130.0.6723.58/chrome-win64/chrome.exe",
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
-      executablePath: puppeteer.executablePath(),
     });
 
     const page = await browser.newPage();
