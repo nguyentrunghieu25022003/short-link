@@ -1,4 +1,5 @@
 const puppeteer = require("puppeteer");
+const chromium = require("@sparticuz/chromium");
 const { sleep } = require("../../../helper/sleep");
 const SocialSnapshot = require("../../../models/social-snapshot.model");
 
