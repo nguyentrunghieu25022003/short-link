@@ -16,9 +16,14 @@ module.exports.handleCrawlDataByUsername = async (req, res) => {
   try {
     const { userInput } = req.body;
     browser = await puppeteer.launch({
-      headless: true,
-      executablePath: "C:/Users/ASUS/.cache/puppeteer/chrome/win64-130.0.6723.58/chrome-win64/chrome.exe",
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      /* headless: true,
+      executablePath: '/usr/bin/chromium-browser',
+      args: ["--no-sandbox", "--disable-setuid-sandbox"], */
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath(),
+      headless: chromium.headless,
+      ignoreHTTPSErrors: true,
     });
 
     const page = await browser.newPage();
@@ -96,9 +101,14 @@ module.exports.handleCrawlDataByUserId = async (req, res) => {
   try {
     const { userInput } = req.body;
     browser = await puppeteer.launch({
-      headless: true,
-      executablePath: "C:/Users/ASUS/.cache/puppeteer/chrome/win64-130.0.6723.58/chrome-win64/chrome.exe",
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      /* headless: true,
+      executablePath: '/usr/bin/chromium-browser',
+      args: ["--no-sandbox", "--disable-setuid-sandbox"], */
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath(),
+      headless: chromium.headless,
+      ignoreHTTPSErrors: true,
     });
 
     const page = await browser.newPage();

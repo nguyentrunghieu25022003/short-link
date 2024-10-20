@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@sparticuz/chromium": "^130.0.0",
     "axios": "^1.7.7",
     "bcryptjs": "^2.4.3",
     "cheerio": "^1.0.0",
@@ -24,6 +25,7 @@
     "mongoose": "^8.7.0",
     "morgan": "^1.10.0",
     "puppeteer": "^23.6.0",
+    "puppeteer-core": "^23.6.0",
     "puppeteer-extra": "^3.3.6",
     "puppeteer-extra-plugin-adblocker": "^2.13.6",
     "puppeteer-extra-plugin-block-resources": "^2.4.3",
