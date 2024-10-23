@@ -31,7 +31,7 @@ const Histories = () => {
         <div className="table-responsive mt-5 mb-5">
           <table className="table table-hover table-bordered">
             <thead>
-              <tr className="fs-3 fw-medium table-dark">
+              <tr className="fs-3 fw-medium table-dark text-center">
                 <th className="text-light">#</th>
                 <th className="text-light">Shortened URL</th>
                 <th className="text-light">Original URL</th>
@@ -45,7 +45,7 @@ const Histories = () => {
                   key={index}
                   className="fs-4 fw-normal text-dark table-light align-middle"
                 >
-                  <td>{index + 1}</td>
+                  <td className="text-center">{index + 1}</td>
                   <td className="text-truncate" style={{ maxWidth: "250px" }}>
                     <a
                       href={`${import.meta.env.VITE_API_URL}/${
@@ -67,7 +67,7 @@ const Histories = () => {
                       {link.originalUrl}
                     </a>
                   </td>
-                  <td>{new Date(link.createdAt).toLocaleString()}</td>
+                  <td className="text-center">{new Date(link.createdAt).toLocaleString()}</td>
                   <td>
                     <ul style={{ maxHeight: "100px", overflowY: "auto" }}>
                       {link.visits.map((item, idx) => (

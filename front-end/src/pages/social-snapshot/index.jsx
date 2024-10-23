@@ -72,7 +72,7 @@ const SocialSnapshot = () => {
           <div className="table-responsive">
             <table className="table table-bordered table-hover">
               <thead className="table-dark">
-                <tr className="fs-3 fw-medium table-dark">
+                <tr className="fs-3 fw-medium table-dark text-center">
                   <th>#</th>
                   <th>Facebook URL</th>
                   <th>Email</th>
@@ -86,9 +86,9 @@ const SocialSnapshot = () => {
                   return (
                     <tr
                       key={index}
-                      className="fs-4 fw-normal text-dark table-light align-middle"
+                      className="fs-4 fw-normal text-dark table-light align-middle ="
                     >
-                      <td>{index + 1}</td>
+                      <td className="text-center">{index + 1}</td>
                       <td
                         className="text-truncate"
                         style={{ maxWidth: "280px" }}
@@ -105,7 +105,7 @@ const SocialSnapshot = () => {
                           <span className="text-danger">{item?.userInfo}</span>
                         </a>
                       </td>
-                      <td>
+                      <td className="text-center">
                         {item?.email.map((mail, idx) => (
                           <span className="d-block pt-2 pb-2" key={idx}>
                             {mail.includes("You're logged") ? "Empty" : mail}
@@ -113,7 +113,7 @@ const SocialSnapshot = () => {
                         ))}
                         {item.email.length === 0 && <span>Empty</span>}
                       </td>
-                      <td>
+                      <td className="text-center">
                         {item?.phoneNumber.map((number, idx) => (
                           <span className="d-block pt-2 pb-2" key={idx}>
                             {number.includes("You're logged") ? "Empty" : number}
@@ -121,7 +121,7 @@ const SocialSnapshot = () => {
                         ))}
                         {item.phoneNumber.length === 0 && <span>Empty</span>}
                       </td>
-                      <td>{new Date(item.createdAt).toLocaleString()}</td>
+                      <td className="text-center">{new Date(item.createdAt).toLocaleString()}</td>
                     </tr>
                   );
                 })}

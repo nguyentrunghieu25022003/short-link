@@ -1,7 +1,12 @@
 const puppeteer = require("puppeteer");
-const chromium = require("@sparticuz/chromium");
+const fs = require("fs");
 const { sleep } = require("../../../helper/sleep");
 const SocialSnapshot = require("../../../models/social-snapshot.model");
+const rawConfig = fs.readFileSync("config.json", "utf-8");
+
+const config = JSON.parse(
+  rawConfig.replace(/\$\{(.*?)\}/g, (match, varName) => process.env[varName])
+);
 
 module.exports.getAllResult = async (req, res) => {
   try {
@@ -17,20 +22,27 @@ module.exports.handleCrawlDataByUsername = async (req, res) => {
   try {
     const { userInput } = req.body;
     browser = await puppeteer.launch({
-      /* headless: true,
-      executablePath: '/usr/bin/chromium-browser',
-      args: ["--no-sandbox", "--disable-setuid-sandbox"], */
-      args: chromium.args,
-      defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath(),
-      headless: chromium.headless,
-      ignoreHTTPSErrors: true,
+      headless: true,
+      executablePath: "/usr/bin/google-chrome",
+      args: [
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        `--proxy-server=${config.proxy.http}`,
+      ],
     });
 
     const page = await browser.newPage();
+    if (config.proxy.username && config.proxy.password) {
+      await page.authenticate({
+        username: config.proxy.username,
+        password: config.proxy.password,
+      });
+    }
+
     const url = `${process.env.FACEBOOK_URL}/login/identify/?ctx=recover&from_login_screen=0`;
     await page.goto(url, {
       waitUntil: "networkidle2",
+      timeout: 60000,
     });
 
     await sleep(1000);
@@ -47,25 +59,35 @@ module.exports.handleCrawlDataByUsername = async (req, res) => {
       await page.waitForNavigation({ waitUntil: "networkidle2" });
     }
 
-    await sleep(3000);
+    await sleep(1000);
     const email = await page.evaluate(() => {
-      const emailElements = document.querySelector("div._9o1y") || document.querySelector("div._aklx");
-      if(emailElements) {
-        const emailArray = emailElements ? emailElements.innerText.trim().split('\n').map(email => email.trim()) : [];
-        const validEmailArray = emailArray.filter(email => {
+      const emailElements =
+        document.querySelector("div._9o1y") ||
+        document.querySelector("div._aklx");
+      if (emailElements) {
+        const emailArray = emailElements
+          ? emailElements.innerText
+              .trim()
+              .split("\n")
+              .map((email) => email.trim())
+          : [];
+        const validEmailArray = emailArray.filter((email) => {
           const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
           return emailRegex.test(email);
         });
-    
         return Array.from(new Set(validEmailArray));
       }
       return [];
     });
 
     const phone = await page.evaluate(() => {
-      const phoneElements = Array.from(document.querySelectorAll("div[dir='ltr']"));
-      if(phoneElements) {
-        const phoneArray = phoneElements ? phoneElements.map(phoneElement => phoneElement.innerText.trim()) : [];
+      const phoneElements = Array.from(
+        document.querySelectorAll("div[dir='ltr']")
+      );
+      if (phoneElements) {
+        const phoneArray = phoneElements
+          ? phoneElements.map((phoneElement) => phoneElement.innerText.trim())
+          : [];
         return Array.from(new Set(phoneArray));
       }
       return [];
@@ -86,8 +108,8 @@ module.exports.handleCrawlDataByUsername = async (req, res) => {
     });
     await browser.close();
     res.status(200).json({
-        email: email,
-        phone: phone
+      email: email,
+      phone: phone,
     });
   } catch (err) {
     if (browser) {
@@ -102,20 +124,26 @@ module.exports.handleCrawlDataByUserId = async (req, res) => {
   try {
     const { userInput } = req.body;
     browser = await puppeteer.launch({
-      /* headless: true,
-      executablePath: '/usr/bin/chromium-browser',
-      args: ["--no-sandbox", "--disable-setuid-sandbox"], */
-      args: chromium.args,
-      defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath(),
-      headless: chromium.headless,
-      ignoreHTTPSErrors: true,
+      headless: true,
+      executablePath: "/usr/bin/google-chrome",
+      args: [
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        `--proxy-server=${config.proxy.http}`,
+      ],
     });
 
     const page = await browser.newPage();
+    if (config.proxy.username && config.proxy.password) {
+      await page.authenticate({
+        username: config.proxy.username,
+        password: config.proxy.password,
+      });
+    }
     const url = `${process.env.FACEBOOK_URL}/login`;
     await page.goto(url, {
       waitUntil: "networkidle2",
+      timeout: 60000,
     });
 
     await sleep(1000);
@@ -125,32 +153,43 @@ module.exports.handleCrawlDataByUserId = async (req, res) => {
     await page.click("button[name='login']");
     await page.waitForNavigation({ waitUntil: "networkidle2" });
 
-    await sleep(3000);
+    await sleep(1000);
     const tryAnotherWayLink = await page.$("a[name='tryanotherway']");
     if (tryAnotherWayLink) {
       await tryAnotherWayLink.click();
       await page.waitForNavigation({ waitUntil: "networkidle2" });
     }
 
-    await sleep(3000);
+    await sleep(1000);
     const email = await page.evaluate(() => {
-      const emailElements = document.querySelector("div._9o1y") || document.querySelector("div._aklx");
-      if(emailElements) {
-        const emailArray = emailElements ? emailElements.innerText.trim().split('\n').map(email => email.trim()) : [];
-        const validEmailArray = emailArray.filter(email => {
+      const emailElements =
+        document.querySelector("div._9o1y") ||
+        document.querySelector("div._aklx");
+      if (emailElements) {
+        const emailArray = emailElements
+          ? emailElements.innerText
+              .trim()
+              .split("\n")
+              .map((email) => email.trim())
+          : [];
+        const validEmailArray = emailArray.filter((email) => {
           const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
           return emailRegex.test(email);
         });
-    
+
         return Array.from(new Set(validEmailArray));
       }
       return [];
     });
 
     const phone = await page.evaluate(() => {
-      const phoneElements = Array.from(document.querySelectorAll("div[dir='ltr']"));
-      if(phoneElements) {
-        const phoneArray = phoneElements ? phoneElements.map(phoneElement => phoneElement.innerText.trim()) : [];
+      const phoneElements = Array.from(
+        document.querySelectorAll("div[dir='ltr']")
+      );
+      if (phoneElements) {
+        const phoneArray = phoneElements
+          ? phoneElements.map((phoneElement) => phoneElement.innerText.trim())
+          : [];
         return Array.from(new Set(phoneArray));
       }
       return [];
@@ -162,6 +201,7 @@ module.exports.handleCrawlDataByUserId = async (req, res) => {
       phoneNumber: phone,
     });
     await socialSnapshot.save();
+
     const client = await page.createCDPSession();
     await client.send("Network.clearBrowserCookies");
     await client.send("Network.clearBrowserCache");
@@ -170,9 +210,10 @@ module.exports.handleCrawlDataByUserId = async (req, res) => {
       storageTypes: "all",
     });
     await browser.close();
+
     res.status(200).send({
       email: email,
-      phone: phone
+      phone: phone,
     });
   } catch (err) {
     if (browser) {
