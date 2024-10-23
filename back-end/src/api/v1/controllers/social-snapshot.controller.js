@@ -27,6 +27,10 @@ module.exports.handleCrawlDataByUsername = async (req, res) => {
       args: [
         "--no-sandbox",
         "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-gpu",
+        "--no-zygote",
+        "--single-process",
         `--proxy-server=${config.proxy.http}`,
       ],
     });
@@ -129,6 +133,10 @@ module.exports.handleCrawlDataByUserId = async (req, res) => {
       args: [
         "--no-sandbox",
         "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-gpu",
+        "--no-zygote",
+        "--single-process",
         `--proxy-server=${config.proxy.http}`,
       ],
     });

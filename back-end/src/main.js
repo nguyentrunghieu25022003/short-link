@@ -8,11 +8,6 @@ const mongodb = require("../config/index");
 const path = require("path");
 const routes = require("./api/v1/routes/index.route");
 const corsHelper = require("./helper/cors");
-const config = require("../config.json");
-
-/* process.env.HTTP_PROXY = config.proxy.http;
-process.env.HTTPS_PROXY = config.proxy.https;
-process.env.NO_PROXY = config.proxy.no_proxy; */
 
 const app = express();
 const port = 3001;
@@ -33,8 +28,12 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+app.use(express.static(path.join(__dirname, "../../front-end/dist")));
 
 routes(app);
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../../front-end/dist", "index.html"));
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
